@@ -17,12 +17,6 @@ node_modules
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 # misc
 /.sass-cache
@@ -37,3 +31,14 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Next.js
+.next
+/target
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.default.json
+!.vscode/tasks.default.json
+!.vscode/launch.default.json
+!.vscode/extensions.default.json
