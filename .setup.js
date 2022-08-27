@@ -7,7 +7,16 @@ function copyFromDefault(p) {
     }
   }
 }
+function copyEnv() {
+  const envDestination = '.env';
+  const envDefault = '.env.example';
+  if (!fs.existsSync(envDestination) && fs.existsSync(envDefault)) {
+    fs.copyFileSync(envDefault, envDestination);
+  }
+}
 
 ['.vscode/settings.json', '.vscode/extensions.json', '.vscode/launch.json'].map(
   copyFromDefault
 );
+
+copyEnv();

@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Clash Display', sans-serif;
+  src: url(../../public/fonts/ClashDisplay-Regular.otf);
+  src: url(../../public/fonts/ClashDisplay-Bold.otf);
+  font-weight: 400;
+  font-style: normal;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: 'Clash Display';
+}
+
+body {
+  background-color: #f0f1f4;
+}
