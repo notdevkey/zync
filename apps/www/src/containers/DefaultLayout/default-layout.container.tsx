@@ -12,7 +12,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>{children}</main>
+      <main className="p-6">{children}</main>
 
       {process.env.NODE_ENV !== 'production' && (
         <ReactQueryDevtools initialIsOpen={false} />
