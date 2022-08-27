@@ -21,4 +21,51 @@ export const classRouter = createRouter()
       });
       return _class;
     },
+  })
+  .mutation('create', {
+    input: z.object({
+      name: z.string(),
+      description: z.string().optional(),
+    }),
+    async resolve({ input }) {
+      const { name, description } = input;
+      const _class = await prisma.class.create({
+        data: { name, description: description ?? '' },
+      });
+      return _class;
+    },
+  })
+  .mutation('addProperty', {
+    input: z.object({
+      name: z.string(),
+      description: z.string(),
+      classId: z.string(),
+    }),
+    async resolve({ input }) {
+      const { classId, description, name } = input;
+      const property = await prisma.property.create({
+        data: { name, type: 'String', description, classId },
+      });
+      return property;
+    },
+  })
+  .mutation('delete', {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input }) {
+      const { id } = input;
+      const _class = await prisma.class.delete({ where: { id } });
+      return _class;
+    },
+  })
+  .mutation('deleteProperty', {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input }) {
+      const { id } = input;
+      const property = await prisma.property.delete({ where: { id } });
+      return property;
+    },
   });
