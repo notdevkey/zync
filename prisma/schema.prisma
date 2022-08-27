@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Class {
-  id          String     @id @default(cuid())
+  id          String     @id @default(uuid())
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   name        String     @db.VarChar(100)
@@ -20,9 +20,19 @@ model Class {
 }
 
 model Property {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  class     Class    @relation(fields: [classId], references: [id])
-  classId   String
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String   @db.VarChar(100)
+  type        Type
+  description String   @db.VarChar(256)
+
+  class   Class  @relation(fields: [classId], references: [id])
+  classId String
+}
+
+enum Type {
+  String
+  Integer
+  DateTime
 }
