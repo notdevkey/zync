@@ -1,4 +1,4 @@
-import { Button, MermaidDisplay } from '@/components';
+import { Button } from '@/components';
 import { trpc } from '@/utils/trpc';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
 import { Type } from '@prisma/client';
@@ -158,9 +158,6 @@ export function Index() {
             </table>
           </div>
         ))}
-      <div className="bg-gray-200 mt-5">
-        <MermaidDisplay />
-      </div>
     </div>
   );
 }
