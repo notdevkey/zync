@@ -38,13 +38,14 @@ export const classRouter = createRouter()
   .mutation('addProperty', {
     input: z.object({
       name: z.string(),
+      type: z.enum(['String', 'Integer', 'DateTime']),
       description: z.string(),
       classId: z.string(),
     }),
     async resolve({ input }) {
-      const { classId, description, name } = input;
+      const { classId, type, description, name } = input;
       const property = await prisma.property.create({
-        data: { name, type: 'String', description, classId },
+        data: { name, type, description, classId },
       });
       return property;
     },
