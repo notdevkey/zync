@@ -38,7 +38,7 @@ export const classRouter = createRouter()
   .mutation('addProperty', {
     input: z.object({
       name: z.string(),
-      type: z.enum(['String', 'Integer', 'DateTime']),
+      type: z.string(),
       description: z.string(),
       classId: z.string(),
     }),

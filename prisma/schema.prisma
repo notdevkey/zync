@@ -24,15 +24,9 @@ model Property {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   name        String   @db.VarChar(100)
-  type        Type
+  type        String   @db.VarChar(20)
   description String   @db.VarChar(256)
 
   class   Class  @relation(fields: [classId], references: [id])
   classId String
-}
-
-enum Type {
-  String
-  Integer
-  DateTime
 }
