@@ -44,3 +44,10 @@ Thumbs.db
 !.vscode/extensions.default.json
 
 .env
+
+apps/cli/target
+**/*.rs.bk
+Cargo.lock
+bin/
+pkg/
+wasm-pack.log
