@@ -9,7 +9,7 @@
         "cwd": "apps/cli",
         "commands": [
           { "command": "wasm-pack build" },
-          { "command": "cd core && npx tsc" }
+          { "command": "cd core && yarn build" }
         ]
       }
     }
