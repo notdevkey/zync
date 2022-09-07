@@ -1,0 +1,4 @@
+schemas:
+  - name: Typescript backend
+    type: ts
+    path: .

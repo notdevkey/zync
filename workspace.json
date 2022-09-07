@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "cli": "apps/cli",
+    "cli": "libs/cli",
     "www": "apps/www",
     "www-e2e": "apps/www-e2e"
   }

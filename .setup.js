@@ -16,7 +16,7 @@ function copyEnv() {
 }
 
 ['.vscode/settings.json', '.vscode/extensions.json', '.vscode/launch.json'].map(
-  copyFromDefault
+  copyFromDefault,
 );
 
 copyEnv();
