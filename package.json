@@ -33,7 +33,6 @@
     "@trpc/next": "^9.27.2",
     "@trpc/react": "^9.27.2",
     "@trpc/server": "^9.27.2",
-    "@zync/cli": "dist/libs/wasm-cli/",
     "commander": "^9.4.0",
     "core-js": "^3.6.5",
     "inquirer": "^9.1.1",
