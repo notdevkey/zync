@@ -3,10 +3,9 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Satoshi', sans-serif;
-  src: url(../../public/fonts/Satoshi-Regular.otf);
-  src: url(../../public/fonts/Satoshi-Bold.otf);
-  font-weight: 400;
+  font-family: 'Clash Display', sans-serif;
+  src: url(../../public/fonts/ClashDisplay-Regular.otf);
+  src: url(../../public/fonts/ClashDisplay-Semibold.otf);
   font-style: normal;
 }
 
@@ -14,7 +13,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  font-family: 'Satoshi';
+  font-family: 'Clash Display';
 }
 
 body {

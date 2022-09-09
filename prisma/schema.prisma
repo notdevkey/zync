@@ -25,7 +25,7 @@ model Property {
   updatedAt   DateTime @updatedAt
   name        String   @db.VarChar(100)
   type        String   @db.VarChar(20)
-  description String   @db.VarChar(256)
+  description String?  @db.VarChar(256)
 
   class   Class  @relation(fields: [classId], references: [id])
   classId String

@@ -15,7 +15,7 @@ export function MermaidDisplay() {
         // Imagine prev as all previous values iteratively before curr in each loop
         prev +
         `
-          class ${curr.name} {
+          class ${curr.name.replace(' ', '_')} {
             ${curr.properties
               .map((p) => `${p.type} ${p.name.toLowerCase()}\n`)
               .join('')}
@@ -41,7 +41,10 @@ export function MermaidDisplay() {
               !Object.values(PrimitiveType).includes(p.type as PrimitiveType)
             ) {
               // TODO: Generate different relation according to relation type
-              return `${curr.name} --> ${p.type}\n`;
+              return `${curr.name.replace(' ', '_')} --> ${p.type.replace(
+                ' ',
+                '_',
+              )}\n`;
             }
           })
           .join(''),
@@ -54,7 +57,6 @@ export function MermaidDisplay() {
     const classes = generateClasses();
     const relations = generateRelations();
 
-    if (!classes || !relations) return;
     // const relations = generateRelations();
     return relations + '\n' + classes;
   }, [generateClasses, generateRelations]);
@@ -62,10 +64,10 @@ export function MermaidDisplay() {
   return (
     <Mermaid
       chart={`
-      classDiagram
+        classDiagram
 
-      ${formattedClasses}
-      `}
+        ${formattedClasses}
+        `}
     />
   );
 }

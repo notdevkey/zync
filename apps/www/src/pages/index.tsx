@@ -1,6 +1,7 @@
 import { Button, MermaidDisplay } from '@/components';
 import { trpc } from '@/utils/trpc';
 import { Listbox, Transition } from '@headlessui/react';
+import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
 import {
@@ -18,6 +19,13 @@ type FormValues = {
   description: string;
 };
 
+const QUERY_ALL_CLASSES = 'class.all';
+const DEFAULT_PROP_VALUES: FormValues = {
+  name: '',
+  description: '',
+  type: 'String',
+};
+
 export function Index() {
   const ctx = trpc.useContext();
 
@@ -25,27 +33,43 @@ export function Index() {
   const [idxToCreate, setIdxToCreate] = useState<string>('');
 
   // Stores the form data for property creation (TODO: validation)
-  const [propertyData, setPropertyData] = useState<FormValues>({
-    description: '',
+  const [propertyData, setPropertyData] =
+    useState<FormValues>(DEFAULT_PROP_VALUES);
+
+  const [classProperties, setClassProperties] = useState({
     name: '',
-    type: 'String',
+    description: '',
   });
+  const [isClassCreationProcess, setIsClassCreationProcess] =
+    useState<boolean>(false);
 
   // Gets all available classes with properties
-  const { data: classes } = trpc.useQuery(['class.all']);
+  const { data: classes } = trpc.useQuery([QUERY_ALL_CLASSES]);
 
   // Handle for creating property
   const addProperty = trpc.useMutation(['class.addProperty'], {
     onSuccess() {
       // Tells React Query to fetch all classes again after update
-      ctx.invalidateQueries(['class.all']);
+      ctx.invalidateQueries([QUERY_ALL_CLASSES]);
     },
   });
 
   // Handle for deleting property
   const deleteProperty = trpc.useMutation(['class.deleteProperty'], {
     onSuccess() {
-      ctx.invalidateQueries(['class.all']);
+      ctx.invalidateQueries([QUERY_ALL_CLASSES]);
+    },
+  });
+
+  const createClass = trpc.useMutation(['class.create'], {
+    onSuccess() {
+      ctx.invalidateQueries([QUERY_ALL_CLASSES]);
+    },
+  });
+
+  const deleteClass = trpc.useMutation(['class.delete'], {
+    onSuccess() {
+      ctx.invalidateQueries([QUERY_ALL_CLASSES]);
     },
   });
 
@@ -72,7 +96,6 @@ export function Index() {
   // Stores new property data in state before submission
   const onChange = useCallback(
     (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      console.log(e.target.value);
       setPropertyData((propertyData) => ({
         ...propertyData,
         [e.target.name]: e.target.value,
@@ -81,14 +104,33 @@ export function Index() {
     [],
   );
 
+  const onCreateClass = useCallback(() => {
+    createClass.mutate(classProperties);
+  }, [classProperties, createClass]);
+
+  const onDeleteClass = useCallback(
+    (id: string) => {
+      deleteClass.mutate({ id });
+    },
+    [deleteClass],
+  );
+
   // Listens on key events (for better UX)
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Enter') {
-        onSubmitProperty();
+        if (idxToCreate) {
+          onSubmitProperty();
+        } else if (isClassCreationProcess) {
+          onCreateClass();
+        }
         setIdxToCreate('');
+        setIsClassCreationProcess(false);
+        setPropertyData(DEFAULT_PROP_VALUES);
       } else if (e.key === 'Escape') {
         setIdxToCreate('');
+        setPropertyData(DEFAULT_PROP_VALUES);
+        setIsClassCreationProcess(false);
       }
     }
 
@@ -97,7 +139,7 @@ export function Index() {
     return () => {
       document.removeEventListener('keydown', handleKey);
     };
-  }, [onSubmitProperty]);
+  }, [idxToCreate, isClassCreationProcess, onCreateClass, onSubmitProperty]);
 
   // Classes to show in types dropdown as relations to other classes
   const listboxClasses = useMemo(() => {
@@ -107,31 +149,37 @@ export function Index() {
 
   return (
     <div>
-      <h1 className="mb-10 text-4xl font-bold">Classes</h1>
+      <h1 className="mb-10 text-4xl font-semibold">Classes</h1>
       {classes &&
         classes.map((c) => (
           <div key={c.id} className="my-8">
             <div className="flex items-center group">
               <div className="mr-5">
-                <h4 className="text-2xl font-bold mb">{c.name}</h4>
-                <p className="mb-2 text-sm">{c.description}</p>
+                <h4 className="text-2xl font-semibold mb"> {c.name}</h4>
+                <p className="mb-2 text-sm font-inter">{c.description}</p>
               </div>
-              <PencilIcon className="hidden w-6 text-gray-400 group-hover:block" />
+              <PencilIcon className="hidden w-6 text-gray-400 group-hover:block cursor-pointer hover:text-gray-600" />
+              <TrashIcon
+                onClick={() => onDeleteClass(c.id)}
+                className="hidden w-6 text-gray-400 group-hover:block ml-2 cursor-pointer hover:text-gray-600"
+              />
             </div>
             <table className="w-full">
-              <thead>
-                <tr>
-                  <td className="p-2 text-sm font-bold border font-inter border-gray">
-                    Name
-                  </td>
-                  <td className="p-2 text-sm font-bold border font-inter border-gray">
-                    Type
-                  </td>
-                  <td className="p-2 text-sm font-bold border font-inter border-gray">
-                    Description
-                  </td>
-                </tr>
-              </thead>
+              {c.properties.length > 0 && (
+                <thead>
+                  <tr>
+                    <td className="p-2 text-sm font-bold border font-inter border-gray">
+                      Name
+                    </td>
+                    <td className="p-2 text-sm font-bold border font-inter border-gray">
+                      Type
+                    </td>
+                    <td className="p-2 text-sm font-bold border font-inter border-gray">
+                      Description
+                    </td>
+                  </tr>
+                </thead>
+              )}
               <tbody>
                 {c.properties.map((p) => (
                   <tr key={p.id} className="relative group">
@@ -158,6 +206,9 @@ export function Index() {
                     <td>
                       <input
                         type="text"
+                        className="bg-transparent outline-none"
+                        autoFocus
+                        placeholder="Name"
                         name="name"
                         onChange={onChange}
                         value={propertyData.name}
@@ -278,7 +329,7 @@ export function Index() {
                   <tr>
                     <td>
                       <Button
-                        text="Add property"
+                        text="Add Property"
                         type="add"
                         onClick={() => setIdxToCreate(c.id)}
                       />
@@ -289,6 +340,38 @@ export function Index() {
             </table>
           </div>
         ))}
+      {isClassCreationProcess && (
+        <div className="my-4">
+          <input
+            type="text"
+            className="text-2xl font-semibold outline-none bg-transparent block"
+            placeholder="Name"
+            autoFocus
+            onChange={(e) =>
+              setClassProperties((prevProps) => ({
+                ...prevProps,
+                name: e.target.value,
+              }))
+            }
+          />
+          <input
+            type="text"
+            className="text-sm outline-none bg-transparent"
+            placeholder="Description"
+            onChange={(e) =>
+              setClassProperties((prevProps) => ({
+                ...prevProps,
+                description: e.target.value,
+              }))
+            }
+          />
+        </div>
+      )}
+      <Button
+        text="Add Class"
+        type="add"
+        onClick={() => setIsClassCreationProcess(true)}
+      />
       <div className="mt-5 bg-gray-200">
         <MermaidDisplay />
       </div>
