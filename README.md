@@ -1,6 +1,12 @@
-# Zync
+<img src="docs/zync-banner.png" />
 
-Ultimate type safety that's always synced within your app
+## [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+<hr>
+
+# Ultimate type safety, synced all across your application.
+
+Zync is the tool for perfectionists with deadlines that deals with persisting shared data troughout an application and finally fixes all your type safety insecurities.
 
 ## Running locally
 
