@@ -8,8 +8,8 @@ import { useState } from 'react';
 import * as THREE from 'three';
 import { GLTF } from 'three-stdlib';
 
-const colorA = new THREE.Color('#2032A5').convertSRGBToLinear();
-const colorB = new THREE.Color('#0F1C4D').convertSRGBToLinear();
+const colorA = new THREE.Color('#9f1cad').convertSRGBToLinear();
+const colorB = new THREE.Color('#17416d').convertSRGBToLinear();
 const fresnel = new THREE.Color('#E7B473').convertSRGBToLinear();
 const material = new LayerMaterial({
   layers: [
@@ -17,14 +17,14 @@ const material = new LayerMaterial({
     new Depth({
       colorA: colorA,
       colorB: colorB,
-      alpha: 0.5,
+      alpha: 1,
       mode: 'normal',
       near: 0,
-      far: 2,
+      far: 5,
       origin: [1, 1, 1],
     }),
     new Depth({
-      colorA: 'purple',
+      colorA: 'blue',
       colorB: colorB,
       alpha: 0.5,
       mode: 'add',
@@ -64,7 +64,7 @@ export function ZyncBlob(props: JSX.IntrinsicElements['group']) {
     <group {...props} dispose={null}>
       <Float
         speed={speed}
-        rotationIntensity={10}
+        rotationIntensity={50}
         dispose={null}
         scale={4}
         position={[8, 0, 0]}

@@ -9,6 +9,7 @@ module.exports = {
         'blue-100-opacity-0.05': 'rgba(93, 103, 112, 0.05)',
         'blue-100-opacity-0.1': 'rgba(93, 103, 112, 0.1)',
         'blue-200': '#151617',
+        'blue-400': '#439CFB',
       },
       fontFamily: {
         'clash-display': 'Clash Display',

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export function Navbar() {
   return (
-    <div className="fixed top-0 grid items-center w-1/2 grid-cols-8 py-8 -translate-x-1/2 left-1/2">
+    <div className="fixed top-0 z-10 grid items-center w-1/2 grid-cols-8 py-8 -translate-x-1/2 left-1/2">
       <div className="flex items-center col-span-2">
         <div className="w-8 mr-4">
           <Image
