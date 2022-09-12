@@ -29,6 +29,7 @@
     "@heroicons/react": "^2.0.8",
     "@nrwl/next": "14.5.8",
     "@prisma/client": "^4.3.0",
+    "@react-three/cannon": "^6.4.0",
     "@react-three/drei": "^9.29.1",
     "@react-three/fiber": "^8.7.3",
     "@trpc/client": "^9.27.2",
