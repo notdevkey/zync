@@ -3,6 +3,8 @@
   "version": 2,
   "projects": {
     "cli": "libs/cli",
+    "landing": "apps/landing",
+    "landing-e2e": "apps/landing-e2e",
     "www": "apps/www",
     "www-e2e": "apps/www-e2e"
   }
