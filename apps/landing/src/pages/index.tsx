@@ -13,8 +13,7 @@ import * as THREE from 'three';
 export function Index() {
   return (
     <div className="flex flex-col justify-center h-screen">
-      <div className="absolute top-0 left-0 w-screen h-screen -z-10 ">
-        <div className="absolute left-0 z-10 w-full h-full bg-gradient-to-r from-black via-black to-transparent" />
+      <div className="absolute top-0 left-0 w-screen h-screen">
         <Canvas>
           <ambientLight intensity={0.1} />
           <pointLight color="red" position={[0, 10, 10]} />
