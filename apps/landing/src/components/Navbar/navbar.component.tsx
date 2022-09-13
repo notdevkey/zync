@@ -1,18 +1,12 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import { ReactComponent as ZyncLogo } from '../../../public/svg/zync.svg';
 
 export function Navbar() {
   return (
     <div className="fixed top-0 z-10 grid items-center w-1/2 grid-cols-8 py-8 -translate-x-1/2 left-1/2">
       <div className="flex items-center col-span-2">
-        <div className="w-8 mr-4">
-          <Image
-            src="/png/zync.png"
-            width={'100%'}
-            height={'100%'}
-            objectFit={'cover'}
-            alt="Zync logo"
-          />
+        <div className="w-6 mr-4">
+          <ZyncLogo />
         </div>
         <h5 className="text-xl text-white">Zync</h5>
       </div>
