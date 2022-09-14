@@ -15,7 +15,7 @@ export function Navbar() {
         <LinkComponent href="/about-us" text="About Us" />
         <LinkComponent href="/motivation" text="Motivation" />
       </div>
-      <button className="col-span-2 rounded-md py-2 text-blue-100 px-6 duration-200 text-sm hover:text-white justify-self-end bg-blue-100-opacity-0.05 hover:bg-blue-100-opacity-0.1 w-fit">
+      <button className="col-span-2 rounded-md py-2 text-blue-100 px-6 duration-200 text-sm hover:text-white justify-self-end bg-blue-100-opacity-0.05 hover:bg-blue-100-opacity-0.1 w-fit font-inter font-medium">
         Sign Up
       </button>
     </div>

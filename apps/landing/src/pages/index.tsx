@@ -25,9 +25,7 @@ export function Index() {
           </Canvas>
         </div>
         <div className="mb-10 isolate">
-          <h1
-            className="mb-6 text-6xl font-medium text-white font-clash-display"
-          >
+          <h1 className="mb-6 text-6xl font-medium text-white font-clash-display">
             Ultimate type safety, <br /> synced all across your application.
           </h1>
           <p className="w-1/2 text-gray-600 font-inter">
@@ -68,7 +66,6 @@ export function Index() {
           <ArrowLongDownIcon className="w-6 h-10 text-blue-100" />
         </div>
       </div>
-      <div></div>
     </div>
   );
 }

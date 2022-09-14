@@ -11,6 +11,10 @@ module.exports = {
         'blue-200': '#151617',
         'blue-400': '#439CFB',
       },
+      gradientColorStops: {
+        'white-opacity-0.2': 'rgba(255, 255, 255, 0.2)',
+        'white-opacity-0.05': 'rgba(255, 255, 255, 0.05)',
+      },
       fontFamily: {
         'clash-display': 'Clash Display',
         inter: 'Inter',
