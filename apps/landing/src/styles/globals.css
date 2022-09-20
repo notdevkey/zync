@@ -2,11 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Clash Display', sans-serif;
-  src: url(../../public/fonts/ClashDisplay-Regular.otf);
-  src: url(../../public/fonts/ClashDisplay-Semibold.otf);
-  font-style: normal;
+@layer base {
+  @font-face {
+    font-family: 'ClashDisplay-Regular';
+    src: local(''), url('/fonts/ClashDisplay-Regular.woff2') format('woff2'),
+      url('/fonts/ClashDisplay-Regular.woff') format('woff'),
+      url('/fonts/ClashDisplay-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'ClashDisplay-Semibold';
+    src: local(''), url('/fonts/ClashDisplay-Semibold.woff2') format('woff2'),
+      url('/fonts/ClashDisplay-Semibold.woff') format('woff'),
+      url('/fonts/ClashDisplay-Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-display: swap;
+    font-style: normal;
+  }
 }
 
 *,
