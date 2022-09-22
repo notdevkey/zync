@@ -56,17 +56,17 @@ export function Index() {
               Leave your email, it helps us understand how important it is to
               you.
             </p>
-            <div className="relative w-fit">
+            <div className="flex items-center justify-between bg-blue-200 border border-transparent rounded-md focus:border-white">
               <input
                 type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 placeholder="Email"
-                className="h-12 px-4 text-sm text-white placeholder-blue-100 duration-200 bg-blue-200 border border-transparent rounded-md outline-none focus:border-white pr-28"
+                className="h-full pl-4 text-sm text-white placeholder-blue-100 duration-200 bg-transparent outline-none"
               />
               <button
                 onClick={() => subscribeMutation.mutate(email)}
-                className="absolute right-1 z-20 -translate-y-1/2 top-1/2 bg-blue-100-opacity-0.05 hover:bg-blue-100-opacity-0.1 text-blue-100 hover:text-white duration-200 h-10 text-sm px-4 rounded-md"
+                className="px-6 py-2 m-2 text-sm text-white duration-200 bg-blue-700 rounded-md hover:bg-blue-800 hover:text-white"
               >
                 Sign Up
               </button>
