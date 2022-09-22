@@ -6,11 +6,18 @@ import {
   HeartIcon,
 } from '@heroicons/react/24/outline';
 import { Canvas, useFrame } from '@react-three/fiber';
+import axios from 'axios';
 import { ZyncBlob } from 'public/models/zync-blob';
-import { ReactElement, Suspense } from 'react';
+import { ReactElement, Suspense, useState } from 'react';
+import { useMutation } from 'react-query';
 import * as THREE from 'three';
 
 export function Index() {
+  const [email, setEmail] = useState<string>('');
+  const subscribeMutation = useMutation((email: string) => {
+    return axios.post<null, { email: string }>('/api/subscribe', { email });
+  });
+
   return (
     <div>
       <div className="flex flex-col justify-center h-screen">
@@ -51,11 +58,16 @@ export function Index() {
             </p>
             <div className="relative w-fit">
               <input
-                type="text"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 placeholder="Email"
                 className="h-12 px-4 text-sm text-white placeholder-blue-100 duration-200 bg-blue-200 border border-transparent rounded-md outline-none focus:border-white pr-28"
               />
-              <button className="absolute right-1 z-20 -translate-y-1/2 top-1/2 bg-blue-100-opacity-0.05 hover:bg-blue-100-opacity-0.1 text-blue-100 hover:text-white duration-200 h-10 text-sm px-4 rounded-md">
+              <button
+                onClick={() => subscribeMutation.mutate(email)}
+                className="absolute right-1 z-20 -translate-y-1/2 top-1/2 bg-blue-100-opacity-0.05 hover:bg-blue-100-opacity-0.1 text-blue-100 hover:text-white duration-200 h-10 text-sm px-4 rounded-md"
+              >
                 Sign Up
               </button>
             </div>

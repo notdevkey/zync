@@ -10,44 +10,17 @@ export default function Document() {
         />
         <link
           rel="preload"
-          href="/fonts/ClashDisplay-Regular.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
           href="/fonts/ClashDisplay-Regular.woff"
           as="font"
           type="font/woff"
           crossOrigin="anonymous"
         />
-        <link
-          rel="preload"
-          href="/fonts/ClashDisplay-Regular.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/ClashDisplay-Semibold.ttf"
-          as="font"
-          type="font/ttf"
-          crossOrigin="anonymous"
-        />
+
         <link
           rel="preload"
           href="/fonts/ClashDisplay-Semibold.woff"
           as="font"
           type="font/woff"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/ClashDisplay-Semibold.woff2"
-          as="font"
-          type="font/woff2"
           crossOrigin="anonymous"
         />
       </Head>

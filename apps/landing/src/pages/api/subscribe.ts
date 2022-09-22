@@ -1,23 +1,33 @@
-import { EmailModel } from '@/models/email';
-import mongoose from 'mongoose';
+import dbConnect from '@/lib/db-connect';
+import Email from '@/models/email';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-mongoose.connect(
-  'mongodb+srv://devkey:Sr11VP7K@emails.jho2epp.mongodb.net/?retryWrites=true&w=majority',
-);
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { email } = req.body;
+  const {
+    body: { email },
+    method,
+  } = req;
 
-  if (!email) return res.status(400).send('Email not specified');
+  await dbConnect();
 
-  EmailModel.create({ email }, (email) => {
-    console.log(`Added email ${email}!`);
-    mongoose.disconnect();
-  });
+  switch (method) {
+    case 'POST':
+      try {
+        if (!email) return res.status(400).send('Email not specified');
 
-  return res.send(200);
+        // Create new email entry and save it in MongoDB
+        const emailEntry = await Email.create({ email });
+
+        res.status(200).json({ success: true, data: emailEntry });
+      } catch {
+        res.status(400).json({ success: false });
+      }
+      break;
+    default:
+      res.status(400).json({ success: false, message: 'Method not supported' });
+      break;
+  }
 }

@@ -1,7 +1,11 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
-const EmailSchema = new Schema({
-  email: { type: String, min: 8 },
+const EmailSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: [true, 'Please provide an email.'],
+    maxlength: [60, 'Email must not be longer than 60 characters'],
+  },
 });
 
-export const EmailModel = mongoose.model('User', EmailSchema);
+export default mongoose.models.Email || mongoose.model('Email', EmailSchema);
