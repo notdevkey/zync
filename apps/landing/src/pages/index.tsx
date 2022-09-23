@@ -14,7 +14,15 @@ import * as THREE from 'three';
 export function Index() {
   const [email, setEmail] = useState<string>('');
   const subscribeMutation = useMutation((email: string) => {
-    return axios.post<null, { email: string }>('/api/subscribe', { email });
+    try {
+      const res = axios.post<null, { email: string }>('/api/subscribe', {
+        email,
+      });
+      console.log(res);
+      return res;
+    } catch (e) {
+      console.log(e);
+    }
   });
 
   return (
