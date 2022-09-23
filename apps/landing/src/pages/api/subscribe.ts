@@ -6,10 +6,13 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  console.log('HIT API');
   const {
     body: { email },
     method,
   } = req;
+
+  console.log(email);
 
   await dbConnect();
 
@@ -20,6 +23,8 @@ export default async function handler(
 
         // Create new email entry and save it in MongoDB
         const emailEntry = await Email.create({ email });
+
+        console.log(emailEntry, 'EMAIL');
 
         res.status(200).json({ success: true, data: emailEntry });
       } catch {
