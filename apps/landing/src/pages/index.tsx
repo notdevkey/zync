@@ -13,16 +13,11 @@ import * as THREE from 'three';
 
 export function Index() {
   const [email, setEmail] = useState<string>('');
-  const subscribeMutation = useMutation(async (email: string) => {
-    try {
-      const res = await axios.post<null, { email: string }>('/api/subscribe', {
-        email,
-      });
-      console.log(res);
-      return res;
-    } catch (e) {
-      console.log(e);
-    }
+  const subscribeMutation = useMutation((email: string) => {
+    console.log(process.env.MONGODB_URI, process.env.NEXT_PUBLIC_MONGODB_URI);
+    return axios.post<null, { email: string }>('/api/subscribe', {
+      email,
+    });
   });
 
   return (
@@ -72,7 +67,7 @@ export function Index() {
                 className="h-full pl-4 text-sm text-white placeholder-blue-100 duration-200 bg-transparent outline-none"
               />
               <button
-                onClick={() => subscribeMutation.mutateAsync(email)}
+                onClick={() => subscribeMutation.mutate(email)}
                 className="px-6 py-2 m-2 text-sm text-white duration-200 bg-blue-700 rounded-md hover:bg-blue-800 hover:text-white"
               >
                 Sign Up
