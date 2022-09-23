@@ -13,15 +13,15 @@ export default function Document() {
           href="/fonts/ClashDisplay-Regular.woff"
           as="font"
           type="font/woff"
-          crossOrigin="anonymous"
+          crossOrigin=""
         />
 
         <link
           rel="preload"
-          href="/fonts/ClashDisplay-Semibold.woff"
+          href="/fonts/ClashDisplay-Medium.woff"
           as="font"
           type="font/woff"
-          crossOrigin="anonymous"
+          crossOrigin=""
         />
       </Head>
       <body>
