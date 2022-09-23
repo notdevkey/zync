@@ -72,7 +72,7 @@ export function Index() {
                 className="h-full pl-4 text-sm text-white placeholder-blue-100 duration-200 bg-transparent outline-none"
               />
               <button
-                onClick={() => subscribeMutation.mutate(email)}
+                onClick={() => subscribeMutation.mutateAsync(email)}
                 className="px-6 py-2 m-2 text-sm text-white duration-200 bg-blue-700 rounded-md hover:bg-blue-800 hover:text-white"
               >
                 Sign Up
