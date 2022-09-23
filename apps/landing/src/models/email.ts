@@ -1,6 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
-const EmailSchema = new mongoose.Schema({
+interface IEmail extends Document {
+  email: string;
+}
+
+const EmailSchema = new mongoose.Schema<IEmail>({
   email: {
     type: String,
     required: [true, 'Please provide an email.'],
@@ -8,4 +12,5 @@ const EmailSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.Email || mongoose.model('Email', EmailSchema);
+export default (mongoose.models.Email as Model<IEmail>) ||
+  mongoose.model<IEmail>('Email', EmailSchema);
