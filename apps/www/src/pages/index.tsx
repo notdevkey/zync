@@ -158,10 +158,10 @@ export function Index() {
                 <h4 className="text-2xl font-semibold mb"> {c.name}</h4>
                 <p className="mb-2 text-sm font-inter">{c.description}</p>
               </div>
-              <PencilIcon className="hidden w-6 text-gray-400 group-hover:block cursor-pointer hover:text-gray-600" />
+              <PencilIcon className="hidden w-6 text-gray-400 cursor-pointer group-hover:block hover:text-gray-600" />
               <TrashIcon
                 onClick={() => onDeleteClass(c.id)}
-                className="hidden w-6 text-gray-400 group-hover:block ml-2 cursor-pointer hover:text-gray-600"
+                className="hidden w-6 ml-2 text-gray-400 cursor-pointer group-hover:block hover:text-gray-600"
               />
             </div>
             <table className="w-full">
@@ -344,7 +344,7 @@ export function Index() {
         <div className="my-4">
           <input
             type="text"
-            className="text-2xl font-semibold outline-none bg-transparent block"
+            className="block text-2xl font-semibold bg-transparent outline-none"
             placeholder="Name"
             autoFocus
             onChange={(e) =>
@@ -356,7 +356,7 @@ export function Index() {
           />
           <input
             type="text"
-            className="text-sm outline-none bg-transparent"
+            className="text-sm bg-transparent outline-none"
             placeholder="Description"
             onChange={(e) =>
               setClassProperties((prevProps) => ({
