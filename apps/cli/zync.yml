@@ -1,0 +1,7 @@
+schemas:
+  - name: Typescript backend
+    project_type: Typescript
+    path: ./typescript.ts
+  - name: Prisma client
+    project_type: Prisma
+    path: ./prisma
