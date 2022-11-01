@@ -13,9 +13,9 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  font-family: 'Clash Display';
 }
 
 body {
   background-color: #f0f1f4;
+  font-family: 'Clash Display';
 }
