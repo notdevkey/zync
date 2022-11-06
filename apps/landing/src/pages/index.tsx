@@ -5,9 +5,10 @@ import {
   CommandLineIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline';
-import { useFrame } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import axios from 'axios';
-import { ReactElement, useState } from 'react';
+import { ZyncBlob } from 'public/models/zync-blob';
+import { ReactElement, Suspense, useState } from 'react';
 import { useMutation } from 'react-query';
 import * as THREE from 'three';
 
@@ -24,14 +25,14 @@ export function Index() {
     <div>
       <div className="flex flex-col justify-center h-screen">
         <div className="absolute top-0 left-0 w-screen h-screen isolate">
-          {/* <Canvas camera={{ fov: 50 }}>
+          <Canvas camera={{ fov: 50 }}>
             <ambientLight intensity={0.1} />
             <pointLight color="red" position={[0, 10, 10]} />
             <Suspense fallback={null}>
               <ZyncBlob />
               <Rig />
             </Suspense>
-          </Canvas> */}
+          </Canvas>
         </div>
         <div className="mb-10 isolate">
           <h1 className="mb-6 text-6xl font-medium text-white font-clash-display">
