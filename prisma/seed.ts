@@ -1,34 +1,50 @@
 import { PrismaClient } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const firstClassId = '5c03994c-fc16-47e0-bd02-d218a370a078';
+  const firstWorkspaceId = randomUUID();
+  const firstClassId = randomUUID();
+
+  await prisma.workspace.upsert({
+    where: {
+      id: firstWorkspaceId,
+    },
+    create: {
+      id: firstWorkspaceId,
+      name: 'First workspace',
+      description: 'Workspace seeded using prisma/seed.ts',
+    },
+    update: {},
+  });
+
   await prisma.class.upsert({
     where: {
       id: firstClassId,
     },
     create: {
-      id: firstClassId,
-      name: 'Cat',
+      id: randomUUID(),
+      workspaceId: firstWorkspaceId,
+      name: 'Test',
       description: 'Cat is a domestic species of small carnivorous mammal',
       properties: {
         createMany: {
           data: [
             {
-              id: '1',
+              id: randomUUID(),
               name: 'Name',
               type: 'String',
               description: 'The name of the cat',
             },
             {
-              id: '2',
+              id: randomUUID(),
               name: 'Age',
               type: 'Integer',
               description: 'Age of the cat',
             },
             {
-              id: '3',
+              id: randomUUID(),
               name: 'Breed',
               type: 'String',
               description: "The cat's breed",
