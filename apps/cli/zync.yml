@@ -1,3 +1,5 @@
+# This is a sample schema file for testing with different project structures
+
 schemas:
   - name: Typescript backend
     project_type: Typescript
