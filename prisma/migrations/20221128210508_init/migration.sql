@@ -4,7 +4,7 @@ CREATE TABLE "Class" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" VARCHAR(100) NOT NULL,
-    "description" VARCHAR(256) NOT NULL,
+    "description" VARCHAR(256),
 
     CONSTRAINT "Class_pkey" PRIMARY KEY ("id")
 );
@@ -14,6 +14,9 @@ CREATE TABLE "Property" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "name" VARCHAR(100) NOT NULL,
+    "type" VARCHAR(20) NOT NULL,
+    "description" VARCHAR(256),
     "classId" TEXT NOT NULL,
 
     CONSTRAINT "Property_pkey" PRIMARY KEY ("id")
