@@ -39,5 +39,5 @@
     }
   },
   "defaultProject": "www",
-  "plugins": ["@nxrs/cargo", "@nxrs/cargo"]
+  "plugins": ["@nxrs/cargo", "@nxrs/cargo", "@nxrs/cargo"]
 }

@@ -23,7 +23,6 @@ enum Language {
 #[command(bin_name = "zync")]
 enum Cli {
     Generate(Generate),
-    Sync(Sync),
 }
 
 #[derive(Parser)]
