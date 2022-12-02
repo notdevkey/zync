@@ -18,7 +18,7 @@
     "dx": "npm-run-all --parallel db-up start:www"
   },
   "lint-staged": {
-    "*.{js, ts, jsx, tsx}": [
+    "*.{js,ts,jsx,tsx}": [
       "nx affected:lint --fix --files",
       "nx format:write --files"
     ],
