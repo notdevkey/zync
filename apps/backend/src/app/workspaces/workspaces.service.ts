@@ -10,11 +10,20 @@ export class WorkspacesService {
     return this.prisma.workspace.findMany();
   }
 
+  async getWorkspaceByName(
+    workspaceWhereInput: Prisma.WorkspaceWhereInput,
+  ): Promise<Workspace | null> {
+    return this.prisma.workspace.findFirst({
+      where: { name: workspaceWhereInput.name },
+    });
+  }
+
   async getAllWorkspaceClasses(
     classWhereInput: Prisma.ClassWhereInput,
   ): Promise<Class[]> {
     return this.prisma.class.findMany({
       where: classWhereInput,
+      include: { properties: true },
     });
   }
 

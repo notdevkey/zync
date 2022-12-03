@@ -187,7 +187,7 @@ export function Index() {
                       {p.name}
                     </td>
                     <td className="p-2 text-sm border font-inter border-gray">
-                      {p.type}
+                      {p.propertyType}
                     </td>
                     <td className="p-2 text-sm border font-inter border-gray">
                       {p.description}

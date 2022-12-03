@@ -13,3 +13,5 @@ serde_yaml = "0.9.13"
 reqwest = { version = "0.11", features = ["json"] }
 tokio = { version = "1", features = ["full"] }
 indoc = "1.0.7"
+dotenv = "0.15.0"
+dotenv_codegen = "0.15.0"

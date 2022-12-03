@@ -1,20 +1,25 @@
 use crate::{
     languages::{prisma::generate_prisma, typescript::generate_typescript},
-    utils::sample_data::get_sample_data,
+    utils::{config::Config, Workspace},
     ConfigFile, Generate, Language,
 };
 
-pub fn run_generate(args: &Generate) {
+pub async fn run_generate(args: &Generate) -> Result<bool, Box<dyn std::error::Error>> {
     let config = ConfigFile::new(&args.config_file_path).unwrap();
-    // TODO: Fetch system models from webapp
-    // let data_to_write = reqwest::get("http://localhost:4200/");
 
-    let data = get_sample_data();
+    let workspace = reqwest::get(format!(
+        "{}/workspaces?name=First workspace",
+        Config::get_host()
+    ))
+    .await?
+    .json::<Workspace>()
+    .await?;
 
     for schema in config.schemas.iter() {
-        match schema.project_type {
-            Language::Prisma => generate_prisma(&data, &schema.path),
-            Language::Typescript => generate_typescript(&data, &schema.path),
+        match schema.1.project_type {
+            Language::Prisma => generate_prisma(&workspace.id, &schema.1).await,
+            Language::Typescript => generate_typescript(&workspace.id, &schema.1).await,
         }
     }
+    Ok(true)
 }
