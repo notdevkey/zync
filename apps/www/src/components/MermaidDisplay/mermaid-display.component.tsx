@@ -17,7 +17,7 @@ export function MermaidDisplay() {
         `
           class ${curr.name.replace(' ', '_')} {
             ${curr.properties
-              .map((p) => `${p.type} ${p.name.toLowerCase()}\n`)
+              .map((p) => `${p.propertyType} ${p.name.toLowerCase()}\n`)
               .join('')}
           }
         `,
@@ -38,13 +38,15 @@ export function MermaidDisplay() {
           .map((p) => {
             // If a the type if a primitive one, then we don't care about drawing relations for that
             if (
-              !Object.values(PrimitiveType).includes(p.type as PrimitiveType)
+              !Object.values(PrimitiveType).includes(
+                p.propertyType as PrimitiveType,
+              )
             ) {
               // TODO: Generate different relation according to relation type
-              return `${curr.name.replace(' ', '_')} --> ${p.type.replace(
+              return `${curr.name.replace(
                 ' ',
                 '_',
-              )}\n`;
+              )} --> ${p.propertyType.replace(' ', '_')}\n`;
             }
           })
           .join(''),
