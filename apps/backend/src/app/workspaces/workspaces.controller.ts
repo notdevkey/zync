@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Workspace } from '@prisma/client';
 import { WorkspacesService } from './workspaces.service';
 
@@ -7,7 +15,12 @@ export class WorkspacesController {
   constructor(private readonly workspacesService: WorkspacesService) {}
 
   @Get()
-  async allUserWorkspaces(): Promise<Workspace[]> {
+  async allUserWorkspaces(
+    @Query('name') workspaceName: string,
+  ): Promise<Workspace[] | Workspace | null> {
+    if (workspaceName) {
+      return this.workspacesService.getWorkspaceByName({ name: workspaceName });
+    }
     // TODO: make this user-specific
     return this.workspacesService.getAllWorkspaces();
   }
@@ -21,7 +34,9 @@ export class WorkspacesController {
 
   @Get(':id/classes')
   async allWorkspaceClasses(@Param('id') workspaceId: string) {
-    return this.workspacesService.getAllWorkspaceClasses({ id: workspaceId });
+    return this.workspacesService.getAllWorkspaceClasses({
+      workspaceId,
+    });
   }
 
   @Post()

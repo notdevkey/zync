@@ -20,6 +20,8 @@ export class PropertiesController {
       name: string;
       type: string;
       classId: string;
+      isRequired: boolean;
+      propertyType: string;
       description?: string;
     },
   ): Promise<Property> {
