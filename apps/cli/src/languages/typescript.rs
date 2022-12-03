@@ -1,25 +1,35 @@
 use indoc::indoc;
-use std::{fs::write, path::PathBuf};
+use std::fs::write;
 
-use crate::utils::{Class, Enum, Property, PropertyType, SystemSchema};
+use crate::{
+    utils::{config::Config, Class, Enum, Property, PropertyType},
+    SystemSchema,
+};
 
-pub fn generate_typescript(schema: &SystemSchema, dest_path: &PathBuf) {
+pub async fn generate_typescript(workspace_id: &str, schema: &SystemSchema) {
+    // Fetch all workspace classes
+    let classes_query = reqwest::get(format!(
+        "{}/workspaces/{}/classes",
+        Config::get_host(),
+        workspace_id
+    ))
+    .await
+    .expect("Failed to fetch endpoint")
+    .json::<Vec<Class>>()
+    .await
+    .expect("Failed to parse json");
+
     // Generate classes (interfaces)
-    let classes = if let Some(classes) = &schema.classes {
-        generate_classes(classes)
-    } else {
-        "".to_string()
-    };
-
+    let classes = generate_classes(&classes_query);
     // Generate enums
-    let enums = if let Some(enums) = &schema.enums {
-        generate_enums(enums)
-    } else {
-        "".to_string()
-    };
+    // let enums = if let Some(enums) = &schema.enums {
+    //     generate_enums(enums)
+    // } else {
+    //     "".to_string()
+    // };
 
-    let result = classes + &enums;
-    let file = write(dest_path, result);
+    let result = classes;
+    let file = write(&schema.path, result);
     match file {
         Ok(_) => println!("File written successfully"),
         Err(_) => println!("Coulnd't write file"),
@@ -83,11 +93,7 @@ fn generate_properties(properties: &Vec<Property>) -> String {
             \t{}{}: {};
             "},
             property.name.to_lowercase(),
-            if let Some(_) = property.required {
-                "?"
-            } else {
-                ""
-            },
+            if property.is_required { "" } else { "?" },
             property_type
         );
         acc + &property
