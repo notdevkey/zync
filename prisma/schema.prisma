@@ -33,12 +33,13 @@ model Class {
 }
 
 model Property {
-  id          String   @id @default(uuid())
-  name        String   @db.VarChar(100)
-  type        String   @db.VarChar(20)
-  description String?  @db.VarChar(256)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(uuid())
+  name         String   @db.VarChar(100)
+  propertyType String   @db.VarChar(20)
+  isRequired   Boolean  @default(false)
+  description  String?  @db.VarChar(256)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   class   Class  @relation(fields: [classId], references: [id])
   classId String
