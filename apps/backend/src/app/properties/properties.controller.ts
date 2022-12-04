@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { Property } from '@prisma/client';
 import { PropertiesService } from './properties.service';
 
@@ -11,24 +11,6 @@ export class PropertiesController {
     @Param('id') propertyId: string,
   ): Promise<Property | null> {
     return this.propertiesService.getPropertyById({ id: propertyId });
-  }
-
-  @Post()
-  async newProperty(
-    @Body()
-    propertyData: {
-      name: string;
-      type: string;
-      classId: string;
-      isRequired: boolean;
-      propertyType: string;
-      description?: string;
-    },
-  ): Promise<Property> {
-    return this.propertiesService.createProperty({
-      ...propertyData,
-      class: { connect: { id: propertyData.classId } },
-    });
   }
 
   @Delete(':id')
