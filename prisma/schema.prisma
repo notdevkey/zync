@@ -11,21 +11,21 @@ datasource db {
 }
 
 model Workspace {
-  id          String   @id @default(uuid())
-  name        String   @db.VarChar(100)
-  description String?  @db.VarChar(256)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  description String?   @db.VarChar(256)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
 
   classes Class[]
 }
 
 model Class {
-  id          String   @id @default(uuid())
-  name        String   @db.VarChar(100)
-  description String?  @db.VarChar(256)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  description String?   @db.VarChar(256)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
 
   properties  Property[]
   workspace   Workspace  @relation(fields: [workspaceId], references: [id])
@@ -33,13 +33,13 @@ model Class {
 }
 
 model Property {
-  id           String   @id @default(uuid())
-  name         String   @db.VarChar(100)
-  propertyType String   @db.VarChar(20)
-  isRequired   Boolean  @default(false)
-  description  String?  @db.VarChar(256)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id           String    @id @default(uuid())
+  name         String    @db.VarChar(100)
+  propertyType String    @db.VarChar(20)
+  isRequired   Boolean?  @default(false)
+  description  String?   @db.VarChar(256)
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
 
   class   Class  @relation(fields: [classId], references: [id])
   classId String

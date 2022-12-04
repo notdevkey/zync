@@ -1,0 +1,12 @@
+-- AlterTable
+ALTER TABLE "Class" ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "updatedAt" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Property" ALTER COLUMN "isRequired" DROP NOT NULL,
+ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "updatedAt" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Workspace" ALTER COLUMN "createdAt" DROP NOT NULL,
+ALTER COLUMN "updatedAt" DROP NOT NULL;
