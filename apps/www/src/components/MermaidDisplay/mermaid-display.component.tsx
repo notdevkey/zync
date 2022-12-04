@@ -1,10 +1,22 @@
 import { PrimitiveType } from '@/consts/enums';
-import { trpc } from '@/utils/trpc';
+import { useAxios } from '@/hooks/use-axios';
+import { Class, Property } from '@prisma/client';
 import { Mermaid } from 'mdx-mermaid/lib/Mermaid';
 import { useCallback, useMemo } from 'react';
+import { useQuery } from 'react-query';
 
-export function MermaidDisplay() {
-  const { data: classes } = trpc.useQuery(['class.all']);
+interface Props {
+  workspaceId: string;
+}
+
+export function MermaidDisplay({ workspaceId }: Props) {
+  const axios = useAxios();
+  const { data: classes } = useQuery(['classes'], async () => {
+    const { data } = await axios.get<(Class & { properties: Property[] })[]>(
+      `/workspaces/${workspaceId}/classes`,
+    );
+    return data;
+  });
 
   // Generates a continuous string of classes formatted for mermaid display
   const generateClasses = useCallback(() => {
