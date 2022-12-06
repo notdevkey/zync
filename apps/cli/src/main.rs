@@ -61,7 +61,6 @@ impl ConfigFile {
         reader.read_to_string(&mut contents)?;
 
         let deserialized_contents = serde_yaml::from_str(&contents).expect("Couldn't parse file");
-        println!("{:?}", deserialized_contents);
         Ok(deserialized_contents)
     }
 }

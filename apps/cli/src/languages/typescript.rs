@@ -2,7 +2,7 @@ use indoc::indoc;
 use std::fs::write;
 
 use crate::{
-    utils::{config::Config, Class, Enum, Property, PropertyType},
+    utils::{config::Config, Class, Enum, Property},
     SystemSchema,
 };
 
@@ -73,7 +73,7 @@ fn generate_classes(classes: &Vec<Class>) -> String {
             indoc! {"
               interface {} {{
               {}\
-              }};\n
+              }}\n
             "},
             class.name, properties
         );
@@ -100,11 +100,12 @@ fn generate_properties(properties: &Vec<Property>) -> String {
     })
 }
 
-fn get_property_type(property_type: &PropertyType) -> &str {
+fn get_property_type(property_type: &str) -> &str {
     // Get the language-specific names for each property type
     match property_type {
-        PropertyType::String | PropertyType::DateTime => "string",
-        PropertyType::Integer => "number",
-        PropertyType::Foreign(_) => todo!(),
+        "String" => "string",
+        "Date" => "Date",
+        "Integer" => "number",
+        _ => property_type,
     }
 }

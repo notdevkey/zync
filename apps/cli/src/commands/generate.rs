@@ -11,9 +11,11 @@ pub async fn run_generate(args: &Generate) -> Result<bool, Box<dyn std::error::E
         "{}/workspaces?name=First workspace",
         Config::get_host()
     ))
-    .await?
+    .await
+    .expect("Couldn't make request")
     .json::<Workspace>()
-    .await?;
+    .await
+    .expect("Couldn't parse data");
 
     for schema in config.schemas.iter() {
         match schema.1.project_type {
