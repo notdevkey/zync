@@ -28,7 +28,7 @@ model Class {
   updatedAt   DateTime? @updatedAt
 
   properties  Property[]
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
 }
 
@@ -41,6 +41,6 @@ model Property {
   createdAt    DateTime? @default(now())
   updatedAt    DateTime? @updatedAt
 
-  class   Class  @relation(fields: [classId], references: [id])
+  class   Class  @relation(fields: [classId], references: [id], onDelete: Cascade)
   classId String
 }
