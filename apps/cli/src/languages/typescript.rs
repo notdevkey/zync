@@ -2,7 +2,7 @@ use indoc::indoc;
 use std::fs::write;
 
 use crate::{
-    utils::{config::Config, Class, Enum, Property},
+    utils::{config::Config, Class, Enum, Property, PropertyTypeRelation},
     SystemSchema,
 };
 
@@ -43,7 +43,7 @@ fn generate_enums(enums: &Vec<Enum>) -> String {
         let values = _enum.values.iter().fold("".to_string(), |acc, value| {
             acc + &format!(
                 indoc! {"
-                  \t{},
+                  {},
                 "},
                 value.name
             )
@@ -73,7 +73,7 @@ fn generate_classes(classes: &Vec<Class>) -> String {
             indoc! {"
               interface {} {{
               {}\
-              }}\n
+              }}
             "},
             class.name, properties
         );
@@ -85,7 +85,7 @@ fn generate_properties(properties: &Vec<Property>) -> String {
     // Iterate over properties and generate a list of properties separated by newline
     properties.iter().fold("".to_string(), |acc, property| {
         // Get the language-specific name of property
-        let property_type = get_property_type(&property.property_type);
+        let property_type = get_property_type(&property.property_type_relation);
 
         // Format and concatenate with result
         let property = format!(
@@ -100,12 +100,12 @@ fn generate_properties(properties: &Vec<Property>) -> String {
     })
 }
 
-fn get_property_type(property_type: &str) -> &str {
+fn get_property_type(property_type: &PropertyTypeRelation) -> &str {
     // Get the language-specific names for each property type
     match property_type {
-        "String" => "string",
-        "Date" => "Date",
-        "Integer" => "number",
-        _ => property_type,
+        PropertyTypeRelation::String => "string",
+        PropertyTypeRelation::Integer => "number",
+        PropertyTypeRelation::DateTime => "Date",
+        PropertyTypeRelation::Foreign { name } => name,
     }
 }
