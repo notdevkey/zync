@@ -50,15 +50,15 @@ model Property {
 }
 
 model TypeOrRelation {
-  id   String  @id @default(uuid())
-  type Type
-  name String? @db.VarChar(50)
+  id   String       @id @default(uuid())
+  type PropertyType
+  name String?      @db.VarChar(50)
 
   // Relations
   properties Property[]
 }
 
-enum Type {
+enum PropertyType {
   STRING
   INTEGER
   DATE_TIME
