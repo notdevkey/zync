@@ -23,7 +23,7 @@ export class WorkspacesService {
   ): Promise<(Class & { properties: Property[] })[]> {
     return this.prisma.class.findMany({
       where: classWhereInput,
-      include: { properties: true },
+      include: { properties: { include: { propertyTypeRelation: true } } },
     });
   }
 

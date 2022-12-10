@@ -1,5 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { Class, Class as ClassModel, Property } from '@prisma/client';
+import {
+  Class,
+  Class as ClassModel,
+  Property,
+  PropertyType,
+} from '@prisma/client';
 import { PropertiesService } from '../properties/properties.service';
 import { ClassesService } from './classes.service';
 
@@ -42,14 +47,26 @@ export class ClassesController {
     @Body()
     propertyData: {
       name: string;
-      propertyType: string;
+      propertyType: PropertyType;
       isRequired: boolean;
       description?: string;
     },
   ): Promise<Property> {
+    const isPrimitiveType = Object.values(PropertyType).includes(
+      propertyData.propertyType,
+    );
     return this.propertiesService.createProperty({
       name: propertyData.name,
-      propertyType: propertyData.propertyType,
+      propertyTypeRelation: {
+        create: {
+          // If property is of primitive type, add it to the type
+          // if not, insert 'FOREIGN' as the type and name of the foreign class as name
+          type: isPrimitiveType
+            ? propertyData.propertyType
+            : PropertyType.FOREIGN,
+          name: !isPrimitiveType ? propertyData.propertyType : null,
+        },
+      },
       description: propertyData.description,
       isRequired: propertyData.isRequired,
       class: { connect: { id: classId } },
