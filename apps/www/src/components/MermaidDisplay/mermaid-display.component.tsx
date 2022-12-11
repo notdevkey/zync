@@ -12,9 +12,11 @@ interface Props {
 export function MermaidDisplay({ workspaceId }: Props) {
   const axios = useAxios();
   const { data: classes } = useQuery(['classes'], async () => {
-    const { data } = await axios.get<(Class & { properties: Property[] })[]>(
-      `/workspaces/${workspaceId}/classes`,
-    );
+    const { data } = await axios.get<
+      (Class & {
+        properties: (Property & { propertyTypeRelation: TypeOrRelation })[];
+      })[]
+    >(`/workspaces/${workspaceId}/classes`);
     return data;
   });
 

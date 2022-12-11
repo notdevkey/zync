@@ -51,14 +51,16 @@ export default function Workspace({
     useState<boolean>(false);
 
   const { data: classes } = useQuery(['classes'], async () => {
-    const { data } = await axios.get<(Class & { properties: Property[] })[]>(
-      `/workspaces/${workspaceId}/classes`,
-    );
+    const { data } = await axios.get<
+      (Class & {
+        properties: (Property & { propertyTypeRelation: TypeOrRelation })[];
+      })[]
+    >(`/workspaces/${workspaceId}/classes`);
     return data;
   });
 
   const addPropertyMutation = useMutation(
-    async (newProperty: Partial<Property>) => {
+    async (newProperty: Partial<Property> & { propertyType: PropertyType }) => {
       await axios.post<Property>(
         `/classes/${newProperty.classId}/properties`,
         newProperty,
