@@ -1,10 +1,24 @@
-import { PrimitiveType } from '@/consts/enums';
-import { trpc } from '@/utils/trpc';
+import { useAxios } from '@/hooks/use-axios';
+import { Class, Property, PropertyType, TypeOrRelation } from '@prisma/client';
+import _ from 'lodash';
 import { Mermaid } from 'mdx-mermaid/lib/Mermaid';
 import { useCallback, useMemo } from 'react';
+import { useQuery } from 'react-query';
 
-export function MermaidDisplay() {
-  const { data: classes } = trpc.useQuery(['class.all']);
+interface Props {
+  workspaceId: string;
+}
+
+export function MermaidDisplay({ workspaceId }: Props) {
+  const axios = useAxios();
+  const { data: classes } = useQuery(['classes'], async () => {
+    const { data } = await axios.get<
+      (Class & {
+        properties: (Property & { propertyTypeRelation: TypeOrRelation })[];
+      })[]
+    >(`/workspaces/${workspaceId}/classes`);
+    return data;
+  });
 
   // Generates a continuous string of classes formatted for mermaid display
   const generateClasses = useCallback(() => {
@@ -17,7 +31,14 @@ export function MermaidDisplay() {
         `
           class ${curr.name.replace(' ', '_')} {
             ${curr.properties
-              .map((p) => `${p.propertyType} ${p.name.toLowerCase()}\n`)
+              .map(
+                (p) =>
+                  `${_.capitalize(
+                    p.propertyTypeRelation.type !== PropertyType.FOREIGN
+                      ? p.propertyTypeRelation.type
+                      : p.propertyTypeRelation.name ?? '',
+                  )} ${p.name.toLowerCase()}\n`,
+              )
               .join('')}
           }
         `,
@@ -38,15 +59,14 @@ export function MermaidDisplay() {
           .map((p) => {
             // If a the type if a primitive one, then we don't care about drawing relations for that
             if (
-              !Object.values(PrimitiveType).includes(
-                p.propertyType as PrimitiveType,
-              )
+              p.propertyTypeRelation.type === PropertyType.FOREIGN &&
+              p.propertyTypeRelation.name
             ) {
               // TODO: Generate different relation according to relation type
               return `${curr.name.replace(
                 ' ',
                 '_',
-              )} --> ${p.propertyType.replace(' ', '_')}\n`;
+              )} --> ${p.propertyTypeRelation.name.replace(' ', '_')}\n`;
             }
           })
           .join(''),

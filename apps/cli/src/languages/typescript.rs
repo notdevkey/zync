@@ -1,8 +1,10 @@
 use indoc::indoc;
 use std::fs::write;
 
+use convert_case::{Case, Casing};
+
 use crate::{
-    utils::{config::Config, Class, Enum, Property, PropertyType},
+    utils::{config::Config, Class, Enum, Property, PropertyTypeRelation},
     SystemSchema,
 };
 
@@ -43,7 +45,7 @@ fn generate_enums(enums: &Vec<Enum>) -> String {
         let values = _enum.values.iter().fold("".to_string(), |acc, value| {
             acc + &format!(
                 indoc! {"
-                  \t{},
+                  {},
                 "},
                 value.name
             )
@@ -73,7 +75,7 @@ fn generate_classes(classes: &Vec<Class>) -> String {
             indoc! {"
               interface {} {{
               {}\
-              }};\n
+              }}
             "},
             class.name, properties
         );
@@ -85,14 +87,14 @@ fn generate_properties(properties: &Vec<Property>) -> String {
     // Iterate over properties and generate a list of properties separated by newline
     properties.iter().fold("".to_string(), |acc, property| {
         // Get the language-specific name of property
-        let property_type = get_property_type(&property.property_type);
+        let property_type = get_property_type(&property.property_type_relation);
 
         // Format and concatenate with result
         let property = format!(
             indoc! {"
             \t{}{}: {};
             "},
-            property.name.to_lowercase(),
+            property.name.to_case(Case::Camel),
             if property.is_required { "" } else { "?" },
             property_type
         );
@@ -100,11 +102,12 @@ fn generate_properties(properties: &Vec<Property>) -> String {
     })
 }
 
-fn get_property_type(property_type: &PropertyType) -> &str {
+fn get_property_type(property_type: &PropertyTypeRelation) -> &str {
     // Get the language-specific names for each property type
     match property_type {
-        PropertyType::String | PropertyType::DateTime => "string",
-        PropertyType::Integer => "number",
-        PropertyType::Foreign(_) => todo!(),
+        PropertyTypeRelation::String => "string",
+        PropertyTypeRelation::Integer => "number",
+        PropertyTypeRelation::DateTime => "Date",
+        PropertyTypeRelation::Foreign { name } => name,
     }
 }

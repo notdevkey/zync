@@ -11,36 +11,56 @@ datasource db {
 }
 
 model Workspace {
-  id          String   @id @default(uuid())
-  name        String   @db.VarChar(100)
-  description String?  @db.VarChar(256)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  description String?   @db.VarChar(256)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
 
+  // Relations
   classes Class[]
 }
 
 model Class {
-  id          String   @id @default(uuid())
-  name        String   @db.VarChar(100)
-  description String?  @db.VarChar(256)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  description String?   @db.VarChar(256)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
 
+  // Relations
   properties  Property[]
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId String
 }
 
 model Property {
-  id           String   @id @default(uuid())
-  name         String   @db.VarChar(100)
-  propertyType String   @db.VarChar(20)
-  isRequired   Boolean  @default(false)
-  description  String?  @db.VarChar(256)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  isRequired  Boolean?  @default(false)
+  description String?   @db.VarChar(256)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
 
-  class   Class  @relation(fields: [classId], references: [id])
-  classId String
+  // Relations
+  class                Class          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId              String
+  propertyTypeRelation TypeOrRelation @relation(fields: [typeOrRelationId], references: [id], onDelete: Cascade)
+  typeOrRelationId     String
+}
+
+model TypeOrRelation {
+  id   String       @id @default(uuid())
+  type PropertyType
+  name String?      @db.VarChar(50)
+
+  // Relations
+  properties Property[]
+}
+
+enum PropertyType {
+  STRING
+  INTEGER
+  DATE_TIME
+  FOREIGN
 }

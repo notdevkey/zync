@@ -10,7 +10,9 @@ import { AppModule } from './app/app.module';
 import { PrismaService } from './shared/prisma.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: { origin: 'http://localhost:4200' },
+  });
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
   const globalPrefix = 'api';

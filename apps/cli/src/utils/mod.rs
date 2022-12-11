@@ -1,21 +1,25 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 pub mod config;
 
-#[derive(Debug, Default, Deserialize)]
-pub enum PropertyType {
+#[derive(Default, Debug, Deserialize, Serialize)]
+#[serde(tag = "type")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum PropertyTypeRelation {
     #[default]
     String,
     Integer,
     DateTime,
-    Foreign(Class),
+    Foreign {
+        name: String,
+    },
 }
 
-#[derive(Default, Debug, Deserialize)]
+#[derive(Default, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Property {
     pub name: String,
-    pub property_type: PropertyType,
+    pub property_type_relation: PropertyTypeRelation,
     pub is_required: bool,
     pub description: String,
 }
