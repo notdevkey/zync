@@ -1,6 +1,8 @@
 use indoc::indoc;
 use std::fs::write;
 
+use convert_case::{Case, Casing};
+
 use crate::{
     utils::{config::Config, Class, Enum, Property, PropertyTypeRelation},
     SystemSchema,
@@ -92,7 +94,7 @@ fn generate_properties(properties: &Vec<Property>) -> String {
             indoc! {"
             \t{}{}: {};
             "},
-            property.name.to_lowercase(),
+            property.name.to_case(Case::Camel),
             if property.is_required { "" } else { "?" },
             property_type
         );
