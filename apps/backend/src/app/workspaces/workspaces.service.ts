@@ -1,5 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Class, Prisma, Property, Workspace } from '@prisma/client';
+import {
+  Class,
+  Prisma,
+  Property,
+  TypeOrRelation,
+  Workspace,
+} from '@prisma/client';
 import { PrismaService } from '../../shared/prisma.service';
 
 @Injectable()
@@ -20,7 +26,11 @@ export class WorkspacesService {
 
   async getAllWorkspaceClasses(
     classWhereInput: Prisma.ClassWhereInput,
-  ): Promise<(Class & { properties: Property[] })[]> {
+  ): Promise<
+    (Class & {
+      properties: (Property & { propertyTypeRelation: TypeOrRelation })[];
+    })[]
+  > {
     return this.prisma.class.findMany({
       where: classWhereInput,
       include: { properties: { include: { propertyTypeRelation: true } } },
