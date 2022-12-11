@@ -2,7 +2,8 @@ import { Button, MermaidDisplay } from '@/components';
 import { useAxios } from '@/hooks/use-axios';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { Class, Property } from '@prisma/client';
+import { Class, Property, PropertyType, TypeOrRelation } from '@prisma/client';
+import _ from 'lodash';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import {
   ChangeEvent,
@@ -16,7 +17,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 interface PropertyFormValues {
   name: string;
-  propertyType: string;
+  propertyType: PropertyType;
   description?: string;
 }
 
@@ -27,7 +28,7 @@ interface ClassFormValues {
 
 const DEFAULT_PROP_VALUES: PropertyFormValues = {
   name: '',
-  propertyType: 'String',
+  propertyType: PropertyType.STRING,
 };
 
 export default function Workspace({
@@ -186,6 +187,11 @@ export default function Workspace({
     return classes?.filter((c) => c.id !== idxToCreate);
   }, [classes, idxToCreate]);
 
+  const formatPropertyType = useCallback(
+    (text: string) => _.startCase(_.toLower(text)),
+    [],
+  );
+
   return (
     <div>
       <h1 className="mb-10 text-4xl font-semibold">Classes</h1>
@@ -226,7 +232,11 @@ export default function Workspace({
                       {p.name}
                     </td>
                     <td className="p-2 text-sm border font-inter border-gray">
-                      {p.propertyType}
+                      {formatPropertyType(
+                        p.propertyTypeRelation.type !== PropertyType.FOREIGN
+                          ? p.propertyTypeRelation.type
+                          : p.propertyTypeRelation.name ?? '',
+                      )}
                     </td>
                     <td className="p-2 text-sm border font-inter border-gray">
                       {p.description}
@@ -266,7 +276,7 @@ export default function Workspace({
                         <div className="relative mt-1">
                           <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-pointer focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                             <span className="block truncate">
-                              {propertyData.propertyType}
+                              {formatPropertyType(propertyData.propertyType)}
                             </span>
                           </Listbox.Button>
                           <Transition
@@ -277,8 +287,9 @@ export default function Workspace({
                           >
                             <Listbox.Options className="absolute flex items-center gap-2 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                               <div>
-                                {['String', 'Integer', 'DateTime'].map(
-                                  (t, i) => (
+                                {Object.values(PropertyType)
+                                  .filter((p) => p !== PropertyType.FOREIGN)
+                                  .map((propertyType, i) => (
                                     <Listbox.Option
                                       key={i}
                                       className={({ active }) =>
@@ -288,7 +299,7 @@ export default function Workspace({
                                             : 'text-gray-900'
                                         }`
                                       }
-                                      value={t}
+                                      value={propertyType}
                                     >
                                       {({ selected }) => (
                                         <>
@@ -299,7 +310,7 @@ export default function Workspace({
                                                 : 'font-normal'
                                             }`}
                                           >
-                                            {t}
+                                            {formatPropertyType(propertyType)}
                                           </span>
                                           {selected ? (
                                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
@@ -312,8 +323,7 @@ export default function Workspace({
                                         </>
                                       )}
                                     </Listbox.Option>
-                                  ),
-                                )}
+                                  ))}
                               </div>
                               <div className="w-[1px] h-10 bg-gray-200" />
                               <div>
