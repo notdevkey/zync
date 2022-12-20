@@ -21,7 +21,7 @@ export function DefaultLayout({ children }: DefaultLayoutProps) {
 
       <QueryClientProvider client={queryClient}>
         <AxiosContextProvider>
-          <main className="p-6">{children}</main>
+          <main>{children}</main>
           {process.env.NODE_ENV !== 'production' && (
             <ReactQueryDevtools initialIsOpen={false} />
           )}

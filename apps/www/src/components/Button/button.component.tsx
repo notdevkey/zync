@@ -7,7 +7,7 @@ interface Props {
 export function Button({ type, text, onClick }: Props) {
   return (
     <button
-      className="py-1.5 px-4 flex text-sm rounded-md bg-gray-50 border border-blue-50 h-fit items-center w-fit font-inter shadow-widget hover:border-blue-200 hover:bg-gray-100"
+      className="py-1.5 px-4 flex text-sm rounded-md bg-dark-200 border border-dark-200 h-fit items-center w-fit font-dm-sans font-medium shadow-widget hover:border-dark-100 duration-100"
       onClick={onClick}
     >
       {text}
