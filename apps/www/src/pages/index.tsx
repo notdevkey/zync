@@ -17,7 +17,7 @@ export default function Workspaces() {
       <div>
         {workspaces?.map((workspace) => (
           <Link href={`/workspaces/${workspace.id}`} key={workspace.id}>
-            <div className="p-12 duration-200 rounded-lg shadow-lg cursor-pointer bg-dark-300 w-fit hover:shadow-xl hover:-translate-y-1">
+            <div className="p-12 duration-200 rounded-lg shadow-lg cursor-pointer bg-darkblue-300 w-fit hover:shadow-xl hover:-translate-y-1">
               <h1 className="font-bold font-inter">{workspace.name}</h1>
               <p className="text-sm font-inter">{workspace.description}</p>
             </div>
