@@ -1,5 +1,6 @@
 import { useAxios } from '@/hooks/use-axios';
 import { formatPropertyType } from '@/utils/format-property';
+import { Switch } from '@headlessui/react';
 import { PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { Class, Property, PropertyType, TypeOrRelation } from '@prisma/client';
 import { useRouter } from 'next/router';
@@ -175,6 +176,9 @@ export function ClassDisplay({
                 <p className="font-medium text-darkblue-100">Type</p>
               </td>
               <td className="p-3">
+                <p className="font-medium text-darkblue-100">Required</p>
+              </td>
+              <td className="p-3">
                 <p className="font-medium text-darkblue-100">Description</p>
               </td>
             </tr>
@@ -210,6 +214,22 @@ export function ClassDisplay({
                         : p.propertyTypeRelation.name ?? '',
                     )}
                   </div>
+                </td>
+                <td className="p-3 border-r border-darkblue-200">
+                  <Switch
+                    checked={!!p.isRequired}
+                    className={`${
+                      p.isRequired ? 'bg-blue-100' : 'bg-darkblue-200'
+                    } relative inline-flex h-6 w-11 items-center rounded-full`}
+                  >
+                    <span className="sr-only">Enable notifications</span>
+                    <span
+                      className={`${
+                        p.isRequired ? 'translate-x-6' : 'translate-x-1'
+                      } inline-block h-4 w-4 transform rounded-full bg-darkblue-100 transition`}
+                    />
+                  </Switch>
+                  {p.isRequired}
                 </td>
                 <td className="p-3">
                   <p className="text-white">{p.description}</p>
