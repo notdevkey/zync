@@ -29,15 +29,21 @@ export function MermaidDisplay({ workspaceId }: Props) {
         // Imagine prev as all previous values iteratively before curr in each loop
         prev +
         `
-          class ${curr.name.replace(' ', '_')} {
+          class ${_.startCase(curr.name)} {
             ${curr.properties
               .map(
                 (p) =>
-                  `${_.capitalize(
-                    p.propertyTypeRelation.type !== PropertyType.FOREIGN
-                      ? p.propertyTypeRelation.type
-                      : p.propertyTypeRelation.name ?? '',
-                  )} ${p.name.toLowerCase()}\n`,
+                  `${_.replace(
+                    _.startCase(
+                      _.toLower(
+                        p.propertyTypeRelation.type !== PropertyType.FOREIGN
+                          ? p.propertyTypeRelation.type
+                          : p.propertyTypeRelation.name ?? '',
+                      ),
+                    ),
+                    ' ',
+                    '',
+                  )} ${_.camelCase(p.name)}\n`,
               )
               .join('')}
           }
@@ -62,11 +68,9 @@ export function MermaidDisplay({ workspaceId }: Props) {
               p.propertyTypeRelation.type === PropertyType.FOREIGN &&
               p.propertyTypeRelation.name
             ) {
-              // TODO: Generate different relation according to relation type
-              return `${curr.name.replace(
-                ' ',
-                '_',
-              )} --> ${p.propertyTypeRelation.name.replace(' ', '_')}\n`;
+              return `${_.startCase(curr.name)} --> ${_.startCase(
+                p.propertyTypeRelation.name,
+              )}\n`;
             }
           })
           .join(''),
