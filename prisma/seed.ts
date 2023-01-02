@@ -1,37 +1,114 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 const prisma = new PrismaClient();
 
+const stringType: Prisma.TypeOrRelationCreateInput = {
+  id: randomUUID(),
+  type: 'STRING',
+};
+
+const integerType: Prisma.TypeOrRelationCreateInput = {
+  id: randomUUID(),
+  type: 'INTEGER',
+};
+
+const foreignType: Prisma.TypeOrRelationCreateInput = {
+  id: randomUUID(),
+  type: 'FOREIGN',
+  name: 'Animal',
+};
+
 async function main() {
-  const firstClassId = '5c03994c-fc16-47e0-bd02-d218a370a078';
-  await prisma.class.upsert({
+  const firstWorkspaceId = randomUUID();
+  const firstClassId = randomUUID();
+  const secondClassId = randomUUID();
+
+  // Create all types of relations beforehand for reusability
+  await prisma.typeOrRelation.upsert({
+    where: { id: stringType.id! },
+    create: stringType,
+    update: {},
+  });
+  await prisma.typeOrRelation.upsert({
+    where: { id: integerType.id! },
+    create: integerType,
+    update: {},
+  });
+  await prisma.typeOrRelation.upsert({
+    where: { id: foreignType.id! },
+    create: foreignType,
+    update: {},
+  });
+
+  // Create the main workspace
+  await prisma.workspace.upsert({
     where: {
-      id: firstClassId,
+      id: firstWorkspaceId,
     },
     create: {
+      id: firstWorkspaceId,
+      name: 'First workspace',
+      description: 'Workspace seeded using prisma/seed.ts',
+    },
+    update: {},
+  });
+
+  // Create classes
+  await prisma.class.upsert({
+    where: { id: firstClassId },
+    create: {
       id: firstClassId,
+      workspaceId: firstWorkspaceId,
+      name: 'Animal',
+      description: 'Basic animal class',
+      properties: {
+        createMany: {
+          data: [
+            {
+              name: 'Name',
+              isRequired: true,
+              typeOrRelationId: stringType.id!,
+              description: 'Name of the animal',
+            },
+          ],
+        },
+      },
+    },
+    update: {},
+  });
+
+  await prisma.class.upsert({
+    where: {
+      id: secondClassId,
+    },
+    create: {
+      id: secondClassId,
+      workspaceId: firstWorkspaceId,
       name: 'Cat',
       description: 'Cat is a domestic species of small carnivorous mammal',
       properties: {
         createMany: {
           data: [
             {
-              id: '1',
+              id: randomUUID(),
               name: 'Name',
-              type: 'String',
               description: 'The name of the cat',
+              typeOrRelationId: stringType.id!,
+              isRequired: true,
             },
             {
-              id: '2',
+              id: randomUUID(),
               name: 'Age',
-              type: 'Integer',
+              typeOrRelationId: integerType.id!,
               description: 'Age of the cat',
             },
             {
-              id: '3',
-              name: 'Breed',
-              type: 'String',
+              id: randomUUID(),
+              name: 'Parent',
               description: "The cat's breed",
+              typeOrRelationId: foreignType.id!,
+              isRequired: true,
             },
           ],
         },

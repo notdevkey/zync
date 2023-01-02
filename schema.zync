@@ -1,7 +1,0 @@
-source {
-  api_key = "1234"
-}
-
-generator Prisma {
-  location = "apps/www/prisma/"
-}

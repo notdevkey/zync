@@ -16,7 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zync/cli": ["libs/cli/src/index.ts"]
+      "@zync/button": ["libs/button/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
