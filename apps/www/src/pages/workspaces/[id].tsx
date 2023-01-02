@@ -1,9 +1,8 @@
-import { MermaidDisplay, Sidebar } from '@/components';
-import { ClassDisplay } from '@/components/Class';
+import { Class, MermaidDisplay, Sidebar } from '@/components';
 import { useAxios } from '@/hooks/use-axios';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import {
-  Class,
+  Class as IClass,
   Property,
   TypeOrRelation,
   type Workspace,
@@ -38,7 +37,7 @@ export default function Workspace({
 
   const { data: classes } = useQuery(['classes'], async () => {
     const { data } = await axios.get<
-      (Class & {
+      (IClass & {
         properties: (Property & { propertyTypeRelation: TypeOrRelation })[];
       })[]
     >(`/workspaces/${workspaceId}/classes`);
@@ -47,7 +46,7 @@ export default function Workspace({
 
   const createClassMutation = useMutation(
     async (_class: ClassFormValues) => {
-      await axios.post<Class>('/classes', {
+      await axios.post<IClass>('/classes', {
         name: classData.name,
         description: classData.description,
         workspaceId,
@@ -109,7 +108,7 @@ export default function Workspace({
         <div className="flex flex-col gap-10 p-10">
           {classes &&
             classes.map((c) => (
-              <ClassDisplay
+              <Class
                 properties={c.properties}
                 name={c.name}
                 description={c.description}
