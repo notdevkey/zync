@@ -33,7 +33,13 @@ export class WorkspacesService {
   > {
     return this.prisma.class.findMany({
       where: classWhereInput,
-      include: { properties: { include: { propertyTypeRelation: true } } },
+      include: {
+        properties: {
+          include: { propertyTypeRelation: true },
+          orderBy: { name: 'asc' },
+        },
+      },
+      orderBy: { name: 'asc' },
     });
   }
 
