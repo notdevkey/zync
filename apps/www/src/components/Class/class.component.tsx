@@ -56,9 +56,7 @@ export function Class({
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Enter') {
-        setIsCreatingProperty(false);
-      } else if (e.key === 'Escape') {
+      if (e.key === 'Escape') {
         setIsCreatingProperty(false);
       }
     }
