@@ -30,7 +30,7 @@ export function Property({
   const updatePropertyMutation = useMutation(
     async (data: Partial<Property & { type: PropertyType }>) => {
       const { id, ...propertyData } = data;
-      await axios.put(`/properties/${data.id}`, propertyData);
+      await axios.put(`/properties/${id}`, propertyData);
     },
     {
       onSuccess() {
@@ -39,6 +39,7 @@ export function Property({
     },
   );
 
+  // For better readability, helper function for updating property details
   const onUpdateProperty = useCallback(
     (property: Partial<Property & { type: PropertyType }>) => {
       updatePropertyMutation.mutate({ ...property, id });
@@ -91,7 +92,6 @@ export function Property({
             } inline-block h-4 w-4 transform rounded-full transition`}
           />
         </Switch>
-        {isRequired}
       </td>
       <td className="p-3">
         {description && (
@@ -100,13 +100,13 @@ export function Property({
             onSubmit={(description) => onUpdateProperty({ description })}
           />
         )}
-      </td>
-      <td className="absolute right-0 hidden -translate-y-1/2 top-1/2 group-hover:block">
-        <Button
-          type="remove"
-          text="Remove"
-          onClick={() => deletePropertyMutation.mutate(id)}
-        />
+        <div className="absolute right-0 hidden -translate-y-1/2 top-1/2 group-hover:block">
+          <Button
+            type="remove"
+            text="Remove"
+            onClick={() => deletePropertyMutation.mutate(id)}
+          />
+        </div>
       </td>
     </tr>
   );

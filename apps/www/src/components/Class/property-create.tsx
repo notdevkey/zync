@@ -1,4 +1,5 @@
 import { useAxios } from '@/hooks/use-axios';
+import { Switch } from '@headlessui/react';
 import { Property as IProperty, PropertyType } from '@prisma/client';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -7,6 +8,7 @@ import { RelationSelect } from '../Property/relation-select';
 interface Props {
   foreignTypes?: string[];
   classId: string;
+  onSubmit(): void;
 }
 
 interface PropertyCreateInput {
@@ -25,7 +27,7 @@ const DEFAULT_PROP_VALUES: PropertyCreateInput = {
   propertyType: PropertyType.STRING,
 };
 
-export function PropertyCreate({ foreignTypes, classId }: Props) {
+export function PropertyCreate({ foreignTypes, classId, onSubmit }: Props) {
   const axios = useAxios();
   const queryClient = useQueryClient();
 
@@ -60,20 +62,21 @@ export function PropertyCreate({ foreignTypes, classId }: Props) {
 
   // Submits property
   const onSubmitProperty = useCallback(() => {
-    const { name, propertyType, description } = propertyData;
+    const { name, propertyType, description, isRequired } = propertyData;
     if (!name || !propertyType || !description) return;
     addPropertyMutation.mutate({
       name,
       description,
       classId,
-      propertyType: propertyType,
-      isRequired: false,
+      propertyType,
+      isRequired,
     });
   }, [addPropertyMutation, classId, propertyData]);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Enter') {
+        onSubmit();
         onSubmitProperty();
         setPropertyData(DEFAULT_PROP_VALUES);
       } else if (e.key === 'Escape') {
@@ -85,14 +88,14 @@ export function PropertyCreate({ foreignTypes, classId }: Props) {
     return () => {
       document.removeEventListener('keydown', handleKey);
     };
-  }, [onSubmitProperty]);
+  }, [onSubmit, onSubmitProperty]);
 
   return (
     <tr className="relative border-b border-darkblue-200 group">
       <td className="p-3 border-r border-darkblue-200">
         <input
           type="text"
-          className="bg-transparent outline-none placeholder:text-darkblue-100 w-fit"
+          className="bg-transparent outline-none placeholder:text-darkblue-100"
           autoFocus
           placeholder="Name"
           name="name"
@@ -112,11 +115,29 @@ export function PropertyCreate({ foreignTypes, classId }: Props) {
           }
         />
       </td>
+      <td className="p-3 border-r border-darkblue-200">
+        <Switch
+          checked={!!propertyData.isRequired}
+          onChange={(isRequired: boolean) =>
+            setPropertyData((prevData) => ({ ...prevData, isRequired }))
+          }
+          className={`${
+            propertyData.isRequired ? 'bg-blue-100' : 'bg-darkblue-200'
+          } relative inline-flex h-6 w-11 items-center rounded-full`}
+        >
+          <span
+            className={`${
+              propertyData.isRequired
+                ? 'translate-x-6 bg-white'
+                : 'translate-x-1 bg-darkblue-100'
+            } inline-block h-4 w-4 transform rounded-full transition`}
+          />
+        </Switch>
+      </td>
       <td className="p-3">
         <input
           type="text"
           className="bg-transparent outline-none placeholder:text-darkblue-100 w-fit"
-          autoFocus
           placeholder="Description"
           name="description"
           onChange={onChange}
