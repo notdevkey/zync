@@ -1,10 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import {
   Class,
   Class as ClassModel,
   Property,
   PropertyType,
 } from '@prisma/client';
+import { convertPropertyType } from '../../utils/convert-property-type';
 import { PropertiesService } from '../properties/properties.service';
 import { ClassesService } from './classes.service';
 
@@ -52,19 +61,18 @@ export class ClassesController {
       description?: string;
     },
   ): Promise<Property> {
-    const isPrimitiveType = Object.values(PropertyType).includes(
-      propertyData.propertyType,
-    );
     return this.propertiesService.createProperty({
       name: propertyData.name,
       propertyTypeRelation: {
         create: {
           // If property is of primitive type, add it to the type
           // if not, insert 'FOREIGN' as the type and name of the foreign class as name
-          type: isPrimitiveType
+          type: convertPropertyType(propertyData.propertyType)
             ? propertyData.propertyType
             : PropertyType.FOREIGN,
-          name: !isPrimitiveType ? propertyData.propertyType : null,
+          name: !convertPropertyType(propertyData.propertyType)
+            ? propertyData.propertyType
+            : null,
         },
       },
       description: propertyData.description,
@@ -73,8 +81,16 @@ export class ClassesController {
     });
   }
 
+  @Put(':id')
+  async updateClass(
+    @Param('id') classId: string,
+    @Body() classData: Partial<{ name: string; description: string }>,
+  ): Promise<Class | null> {
+    return this.classesService.updateClass({ ...classData, id: classId });
+  }
+
   @Delete(':id')
-  async deleteClass(@Param('id') id: string): Promise<Class | null> {
-    return this.classesService.deleteClass({ id });
+  async deleteClass(@Param('id') classId: string): Promise<Class | null> {
+    return this.classesService.deleteClass({ id: classId });
   }
 }

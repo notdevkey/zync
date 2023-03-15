@@ -24,6 +24,13 @@ export class ClassesService {
     return this.prisma.class.create({ data });
   }
 
+  async updateClass(data: Prisma.ClassUpdateInput): Promise<Class> {
+    return this.prisma.class.update({
+      where: { id: data.id?.toString() },
+      data: { ...data },
+    });
+  }
+
   async deleteClass(
     classWhereUniqueInput: Prisma.ClassWhereUniqueInput,
   ): Promise<Class> {

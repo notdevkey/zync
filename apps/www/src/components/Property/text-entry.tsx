@@ -3,16 +3,19 @@ import { useCallback, useEffect, useState } from 'react';
 interface Props {
   text: string;
   onSubmit(newText: string): void;
+  className?: string;
 }
 
-export function TextEntry({ text, onSubmit }: Props) {
+export function TextEntry({ text, onSubmit, className }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [newText, setNewText] = useState(text);
 
   const handleSubmit = useCallback(() => {
-    onSubmit(newText);
+    if (text !== newText) {
+      onSubmit(newText);
+    }
     setIsEditing(false);
-  }, [newText, onSubmit]);
+  }, [newText, onSubmit, text]);
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -39,16 +42,17 @@ export function TextEntry({ text, onSubmit }: Props) {
           }}
         >
           <input
-            autoFocus
             type="text"
-            className="bg-transparent outline-none w-fit font-dm-sans"
+            className={
+              'bg-transparent outline-none w-fit font-dm-sans' + className
+            }
             value={newText}
             maxLength={30}
             onChange={(e) => setNewText(e.target.value)}
           />
         </form>
       ) : (
-        <p className="text-white">{text}</p>
+        <p className={'text-white' + className}>{text}</p>
       )}
     </div>
   );

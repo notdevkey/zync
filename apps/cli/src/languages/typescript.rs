@@ -77,7 +77,8 @@ fn generate_classes(classes: &Vec<Class>) -> String {
               {}\
               }}
             "},
-            class.name, properties
+            class.name.to_case(Case::UpperCamel),
+            properties
         );
         acc + &class
     })

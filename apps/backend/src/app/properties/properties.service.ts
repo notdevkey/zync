@@ -22,6 +22,13 @@ export class PropertiesService {
     return this.prisma.property.create({ data });
   }
 
+  async updateProperty(data: Prisma.PropertyUpdateInput): Promise<Property> {
+    return this.prisma.property.update({
+      where: { id: data.id?.toString() },
+      data,
+    });
+  }
+
   async deleteProperty(
     propertyWhereUniqueInput: Prisma.PropertyWhereUniqueInput,
   ): Promise<Property> {
