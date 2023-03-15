@@ -1,5 +1,5 @@
 import { useAxios } from '@/hooks/use-axios';
-import { PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { TrashIcon } from '@heroicons/react/20/solid';
 import {
   Class,
   Property as IProperty,
@@ -7,10 +7,11 @@ import {
   TypeOrRelation,
 } from '@prisma/client';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Button } from '../Button';
 import { Property } from '../Property';
+import { TextEntry } from '../Property/text-entry';
 import { PropertyCreate } from './property-create';
 
 export function Class({
@@ -24,6 +25,26 @@ export function Class({
   const axios = useAxios();
   const queryClient = useQueryClient();
   const workspaceId = useRouter().query.id as string;
+
+  const updateClassMutation = useMutation(
+    async (data: Partial<Class>) => {
+      console.log(data, 'NEW CLASS');
+      const { id, ...classData } = data;
+      await axios.put(`/classes/${id}`, classData);
+    },
+    {
+      onSuccess() {
+        queryClient.invalidateQueries({ queryKey: ['classes'] });
+      },
+    },
+  );
+
+  const onUpdateClass = useCallback(
+    (_class: Partial<Class>) => {
+      updateClassMutation.mutate({ ..._class, id });
+    },
+    [id, updateClassMutation],
+  );
 
   const { data: classes } = useQuery(['classes'], async () => {
     const { data } = await axios.get<
@@ -71,19 +92,24 @@ export function Class({
     <div className="p-5 rounded-lg bg-darkblue-300">
       <div className="flex items-center mb-4 group">
         <div className="flex items-center gap-5">
-          <h4 className="text-2xl font-medium mb">{name}</h4>
-          <p className="mb-2 text-sm font-medium font-dm-sans text-darkblue-100">
-            {description}
-          </p>
+          <TextEntry
+            className="text-xl"
+            onSubmit={(name) => onUpdateClass({ name })}
+            text={name}
+          />
+          <TextEntry
+            className="mb-2 text-sm font-medium font-dm-sans text-darkblue-100"
+            onSubmit={(description) => onUpdateClass({ description })}
+            text={description || ''}
+          />
         </div>
-        <PencilIcon className="hidden w-6 text-gray-400 cursor-pointer group-hover:block hover:text-gray-600" />
         <TrashIcon
           onClick={() => deleteClassMutation.mutate(id)}
           className="hidden w-6 ml-2 text-gray-400 cursor-pointer group-hover:block hover:text-gray-600"
         />
       </div>
       <div className="text-white font-dm-sans border-darkblue-200">
-        <table className="w-full text-sm border-collapse">
+        <table className="w-full text-sm border-collapse table-fixed">
           <thead>
             <tr className="border-t border-b border-darkblue-200">
               <td className="p-3">
@@ -117,7 +143,11 @@ export function Class({
               />
             ))}
             {isCreatingProperty && (
-              <PropertyCreate foreignTypes={foreignTypes} classId={id} />
+              <PropertyCreate
+                foreignTypes={foreignTypes}
+                onSubmit={() => setIsCreatingProperty(false)}
+                classId={id}
+              />
             )}
           </tbody>
         </table>
