@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import {
   Class,
   Class as ClassModel,
@@ -73,8 +81,16 @@ export class ClassesController {
     });
   }
 
+  @Put(':id')
+  async updateClass(
+    @Param('id') classId: string,
+    @Body() classData: Partial<{ name: string; description: string }>,
+  ): Promise<Class | null> {
+    return this.classesService.updateClass({ ...classData, id: classId });
+  }
+
   @Delete(':id')
-  async deleteClass(@Param('id') id: string): Promise<Class | null> {
-    return this.classesService.deleteClass({ id });
+  async deleteClass(@Param('id') classId: string): Promise<Class | null> {
+    return this.classesService.deleteClass({ id: classId });
   }
 }
