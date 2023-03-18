@@ -37,8 +37,5 @@
     "@zyncli/cli-linux-x64": "0.1.0",
     "@zyncli/cli-windows-arm64": "0.1.0",
     "@zyncli/cli-windows-x64": "0.1.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
