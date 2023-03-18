@@ -55,7 +55,7 @@ jobs:
 
       - name: Install OpenSSL
         if: ${{ matrix.build.os == 'ubuntu-20.04' }}
-        run: sudo apt install libssl-dev libudev-dev pkg-config openssl-devel
+        run: sudo apt install libssl-dev libudev-dev pkg-config
 
       - name: Set the release version
         shell: bash
