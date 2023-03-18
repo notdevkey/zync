@@ -8,8 +8,9 @@ pub async fn run_generate(args: &Generate) -> Result<bool, Box<dyn std::error::E
     let config = ConfigFile::new(&args.config_file_path).unwrap();
 
     let workspace = reqwest::get(format!(
-        "{}/workspaces?name=First workspace",
-        Config::get_host()
+        "{}/workspaces?name={}",
+        Config::get_host(),
+        config.workspace
     ))
     .await
     .expect("Couldn't make request")
@@ -19,8 +20,8 @@ pub async fn run_generate(args: &Generate) -> Result<bool, Box<dyn std::error::E
 
     for schema in config.schemas.iter() {
         match schema.1.project_type {
-            Language::Prisma => generate_prisma(&workspace.id, &schema.1).await,
-            Language::Typescript => generate_typescript(&workspace.id, &schema.1).await,
+            Language::Prisma => generate_prisma(&workspace.id, schema.1).await,
+            Language::Typescript => generate_typescript(&workspace.id, schema.1).await,
         }
     }
     Ok(true)

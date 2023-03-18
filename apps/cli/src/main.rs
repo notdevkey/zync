@@ -50,6 +50,7 @@ pub struct SystemSchema {
 
 #[derive(Debug, Deserialize)]
 pub struct ConfigFile {
+    workspace: String,
     schemas: HashMap<String, SystemSchema>,
 }
 
@@ -68,7 +69,7 @@ impl ConfigFile {
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
     let Cli::Generate(args) = Cli::parse();
-    run_generate(&args).await.expect("Couldn;t generate schema");
+    run_generate(&args).await.expect("Couldn't generate schema");
 
     Ok(())
 }
