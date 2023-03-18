@@ -55,7 +55,7 @@ jobs:
 
       - name: Install OpenSSL
         if: ${{ matrix.build.os == 'ubuntu-20.04' }}
-        run: sudo apt install libssl-dev
+        run: sudo apt install libssl-dev libudev-dev pkg-config openssl-devel
 
       - name: Set the release version
         shell: bash
@@ -73,7 +73,7 @@ jobs:
         with:
           command: build
           args: --release --target ${{ matrix.build.TARGET }}
-          use-cross: ${{ matrix.build.OS == 'ubuntu-20.04' }} # use `cross` for Linux builds
+          # use-cross: ${{ matrix.build.OS == 'ubuntu-20.04' }} # use `cross` for Linux builds
 
       - name: Install node
         uses: actions/setup-node@v3
