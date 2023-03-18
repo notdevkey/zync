@@ -1,6 +1,6 @@
 use crate::{
     languages::{prisma::generate_prisma, typescript::generate_typescript},
-    utils::{config::Config, Workspace},
+    utils::Workspace,
     ConfigFile, Generate, Language,
 };
 
@@ -8,8 +8,7 @@ pub async fn run_generate(args: &Generate) -> Result<bool, Box<dyn std::error::E
     let config = ConfigFile::new(&args.config_file_path).unwrap();
 
     let workspace = reqwest::get(format!(
-        "{}/workspaces?name={}",
-        Config::get_host(),
+        "http://localhost:3333/api/workspaces?name={}",
         config.workspace
     ))
     .await

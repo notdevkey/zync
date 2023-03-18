@@ -4,15 +4,14 @@ use std::fs::write;
 use convert_case::{Case, Casing};
 
 use crate::{
-    utils::{config::Config, Class, Enum, Property, PropertyTypeRelation},
+    utils::{Class, Enum, Property, PropertyTypeRelation},
     SystemSchema,
 };
 
 pub async fn generate_typescript(workspace_id: &str, schema: &SystemSchema) {
     // Fetch all workspace classes
     let classes_query = reqwest::get(format!(
-        "{}/workspaces/{}/classes",
-        Config::get_host(),
+        "http://localhost:3333/api/workspaces/{}/classes",
         workspace_id
     ))
     .await
