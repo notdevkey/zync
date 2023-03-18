@@ -69,7 +69,7 @@ jobs:
         with:
           command: build
           args: --release --target ${{ matrix.build.TARGET }}
-          use-cross: ${{ matrix.build.OS == 'ubuntu-20.04' }} # use `cross` for Linux builds
+          # use-cross: ${{ matrix.build.OS == 'ubuntu-20.04' }} # use `cross` for Linux builds
 
       - name: Install node
         uses: actions/setup-node@v3
