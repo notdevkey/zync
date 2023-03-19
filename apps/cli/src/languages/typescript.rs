@@ -1,3 +1,4 @@
+use async_trait::async_trait;
 use indoc::indoc;
 use std::fs::write;
 
@@ -8,99 +9,110 @@ use crate::{
     SystemSchema,
 };
 
-pub async fn generate_typescript(workspace_id: &str, schema: &SystemSchema) {
-    // Fetch all workspace classes
-    let classes_query = reqwest::get(format!(
-        "{}/workspaces/{}/classes",
-        Config::get_host(),
-        workspace_id
-    ))
-    .await
-    .expect("Failed to fetch endpoint")
-    .json::<Vec<Class>>()
-    .await
-    .expect("Failed to parse json");
+use super::TargetLanguage;
 
-    // Generate classes (interfaces)
-    let classes = generate_classes(&classes_query);
-    // Generate enums
-    // let enums = if let Some(enums) = &schema.enums {
-    //     generate_enums(enums)
-    // } else {
-    //     "".to_string()
-    // };
+pub struct Typescript {}
 
-    let result = classes;
-    let file = write(&schema.path, result);
-    match file {
-        Ok(_) => println!("File written successfully"),
-        Err(_) => println!("Coulnd't write file"),
+#[async_trait]
+impl TargetLanguage for Typescript {
+    async fn generate(&mut self, workspace_id: &str, schema: &SystemSchema) {
+        // Fetch all workspace classes
+        let classes_query = reqwest::get(format!(
+            "{}/workspaces/{}/classes",
+            Config::get_host(),
+            workspace_id
+        ))
+        .await
+        .expect("Failed to fetch endpoint")
+        .json::<Vec<Class>>()
+        .await
+        .expect("Failed to parse json");
+
+        // Generate classes (interfaces)
+        let classes = self.generate_types(&classes_query);
+        // Generate enums
+        // let enums = if let Some(enums) = &schema.enums {
+        //     generate_enums(enums)
+        // } else {
+        //     "".to_string()
+        // };
+
+        let result = classes;
+        let file = write(&schema.path, result);
+        match file {
+            Ok(_) => println!("File written successfully"),
+            Err(_) => println!("Coulnd't write file"),
+        }
     }
-}
 
-fn generate_enums(enums: &Vec<Enum>) -> String {
-    // Iterate over all enums and generate a single string out of them
-    enums.iter().fold("".to_string(), |acc, _enum| {
-        // Format enum values in the expected language format
-        let values = _enum.values.iter().fold("".to_string(), |acc, value| {
-            acc + &format!(
-                indoc! {"
+    fn generate_enums(&mut self, enum_list: &Vec<Enum>) -> String {
+        // Iterate over all enums and generate a single string out of them
+        enum_list.iter().fold("".to_string(), |acc, _enum| {
+            // Format enum values in the expected language format
+            let values = _enum.values.iter().fold("".to_string(), |acc, value| {
+                acc + &format!(
+                    indoc! {"
                   {},
                 "},
-                value.name
-            )
-        });
+                    value.name
+                )
+            });
 
-        // Wrap enum values in enum constructor
-        let formatted_enum = format!(
-            indoc! {"
+            // Wrap enum values in enum constructor
+            let formatted_enum = format!(
+                indoc! {"
               enum {} {{
               {}\
               }};
             "},
-            _enum.name, values
-        );
-        acc + &formatted_enum
-    })
-}
+                _enum.name, values
+            );
+            acc + &formatted_enum
+        })
+    }
 
-fn generate_classes(classes: &Vec<Class>) -> String {
-    // Iterate over classes and generate a single string out of them
-    classes.iter().fold("".to_string(), |acc, class| {
-        // Get all class properties (formatted)
-        let properties = generate_properties(&class.properties);
+    fn generate_types(&mut self, class_list: &Vec<Class>) -> String {
+        // Iterate over classes and generate a single string out of them
+        class_list.iter().fold("".to_string(), |acc, class| {
+            // Get all class properties (formatted)
+            let properties = self.generate_props(&class.properties);
 
-        // Wrap class properties in constructor
-        let class = format!(
-            indoc! {"
+            // Wrap class properties in constructor
+            let class = format!(
+                indoc! {"
               interface {} {{
               {}\
               }}
             "},
-            class.name.to_case(Case::UpperCamel),
-            properties
-        );
-        acc + &class
-    })
-}
+                class.name.to_case(Case::UpperCamel),
+                properties
+            );
+            acc + &class
+        })
+    }
 
-fn generate_properties(properties: &Vec<Property>) -> String {
-    // Iterate over properties and generate a list of properties separated by newline
-    properties.iter().fold("".to_string(), |acc, property| {
-        // Get the language-specific name of property
-        let property_type = get_property_type(&property.property_type_relation);
+    fn generate_generic_types(&mut self, class_list: &Vec<Class>) -> String {
+        "".to_string()
+    }
 
-        // Format and concatenate with result
-        let property = format!(
-            indoc! {"
+    fn generate_props(&mut self, prop_list: &Vec<Property>) -> String {
+        // Iterate over properties and generate a list of properties separated by newline
+        prop_list.iter().fold("".to_string(), |acc, property| {
+            // Get the language-specific name of property
+            let property_type = get_property_type(&property.property_type_relation);
+
+            // Format and concatenate with result
+            let property = format!(
+                indoc! {"
             \t{}{}: {};
             "},
-            property.name.to_case(Case::Camel),
-            if property.is_required { "" } else { "?" },
-            property_type
-        );
-        acc + &property
-    })
+                property.name.to_case(Case::Camel),
+                if property.is_required { "" } else { "?" },
+                property_type
+            );
+            acc + &property
+        })
+    }
 }
 
 fn get_property_type(property_type: &PropertyTypeRelation) -> &str {
