@@ -34,8 +34,8 @@ export function Index() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div className="absolute w-[360px] h-[360px] bg-[#1b77e9] blur-[300px] top-1/3 left-1/3" />
-      <div className="absolute w-[360px] h-[360px] bg-[#BD4BC2] blur-[200px] top-1/2 left-1/2" />
+      <div className="absolute -z-10 w-[360px] h-[360px] bg-[#0c4d9c] blur-[300px] top-1/3 left-1/3" />
+      <div className="absolute -z-10 w-[360px] h-[360px] bg-[#BD4BC2] blur-[200px] top-1/2 left-1/2" />
       <div className="absolute top-0 left-0 w-screen h-screen isolate">
         <Canvas camera={{ fov: 50 }}>
           <ambientLight intensity={0.1} />
@@ -56,16 +56,16 @@ export function Index() {
         persisting shared data troughout an application and finally fixes all
         your type safety insecurities.
       </p>
-      <div className="grid max-w-lg grid-cols-2 my-8 gap-x-8 justify-self-center">
+      <div className="z-10 grid max-w-lg grid-cols-2 my-8 gap-x-8 justify-self-center">
         <Icon icon={<CommandLineIcon />} text={'Language-agnostic'} />
         <Icon icon={<ChartBarIcon />} text={'Analytical'} />
         <Icon icon={<HeartIcon />} text={'Open Source'} />
         <Icon icon={<BoltIcon />} text={'Blazingly Fast'} />
       </div>
-      <div className="relative w-full h-[300px] max-w-6xl ">
+      <div className="relative w-[570px] h-[300px] border border-white/[0.2] max-w-6xl rounded-xl">
         <Image
-          className="mix-blend-color-dodge"
-          src="/png/snippet-bash.png"
+          className="overflow-hidden mix-blend-color-dodge"
+          src="/svg/snippet-bash.svg"
           alt="Bash script"
           objectFit="contain"
           layout="fill"
@@ -126,7 +126,7 @@ function Icon({ icon, text }: { icon: ReactElement; text: string }) {
       <div className="w-6 mr-2 text-white duration-200 group-hover:text-pink-400">
         {icon}
       </div>
-      <p className="text-white font-dm-sans">{text}</p>
+      <p className="font-medium text-white font-dm-sans">{text}</p>
     </div>
   );
 }

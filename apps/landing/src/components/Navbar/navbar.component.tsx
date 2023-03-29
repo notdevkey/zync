@@ -15,7 +15,7 @@ export function Navbar() {
         <LinkComponent href="/about-us" text="About Us" />
         <LinkComponent href="/motivation" text="Motivation" />
       </div>
-      <button className="col-span-2 rounded-md py-2 text-blue-100 px-6 duration-200 text-sm hover:text-white justify-self-end bg-blue-100-opacity-0.05 hover:bg-blue-100-opacity-0.1 w-fit font-inter font-medium">
+      <button className="col-span-2 rounded-lg py-2 text-darkblue-100 px-6 duration-200 text-sm hover:text-white justify-self-end bg-darkblue-100/[0.05] hover:bg-darkblue-100/[0.1] w-fit font-dm-sans font-medium">
         Sign Up
       </button>
     </div>
@@ -24,7 +24,7 @@ export function Navbar() {
 
 function LinkComponent({ text, href }: { text: string; href: string }) {
   return (
-    <div className="text-sm text-blue-100 duration-200 font-md font-inter hover:text-white">
+    <div className="text-sm font-medium duration-200 text-darkblue-100 font-dm-sans hover:text-white">
       <Link href={href}>{text}</Link>
     </div>
   );
