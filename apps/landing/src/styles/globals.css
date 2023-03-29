@@ -35,7 +35,10 @@
 }
 
 body {
-  background-color: #0f1011;
+  background-color: #101415;
+  background-image: url('/svg/bg.svg');
+  background-size: 5vw;
+  background-repeat: repeat;
   font-family: 'Clash Display';
   width: 100%;
   overflow-x: hidden;

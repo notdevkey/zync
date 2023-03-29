@@ -4,12 +4,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'pink-400': '#F187FC',
-        'blue-100': '#5D6770',
-        'blue-100-opacity-0.05': 'rgba(93, 103, 112, 0.05)',
-        'blue-100-opacity-0.1': 'rgba(93, 103, 112, 0.1)',
-        'blue-200': '#151617',
-        'blue-400': '#439CFB',
+        pink: {
+          400: '#F187FC',
+        },
+        blue: {
+          100: '#386DFF',
+        },
+        darkblue: {
+          100: '#72798E',
+          200: '#2A2D30',
+          300: '#1F2123',
+          400: '#101415',
+        },
       },
       gradientColorStops: {
         'white-opacity-0.2': 'rgba(255, 255, 255, 0.2)',
