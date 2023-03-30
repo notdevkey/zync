@@ -11,7 +11,7 @@ module.exports = {
           100: '#386DFF',
         },
         darkblue: {
-          100: '#72798E',
+          100: '#6D7176',
           200: '#2A2D30',
           300: '#1F2123',
           400: '#101415',
@@ -23,7 +23,7 @@ module.exports = {
       },
       fontFamily: {
         'clash-display': 'Clash Display',
-        inter: 'Inter',
+        'dm-sans': 'DM Sans',
       },
       boxShadow: {
         widget: '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
