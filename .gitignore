@@ -43,7 +43,8 @@ Thumbs.db
 !.vscode/launch.default.json
 !.vscode/extensions.default.json
 
-.env
+.env*
+!.env.example
 
 apps/cli/target
 **/*.rs.bk
@@ -52,4 +53,4 @@ bin/
 pkg/
 wasm-pack.log
 build
-/target
+/target/target

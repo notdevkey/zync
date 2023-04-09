@@ -1,5 +1,3 @@
-use std::path::PathBuf;
+use crate::SystemSchema;
 
-use crate::{utils::SystemSchema, ConfigFile};
-
-pub fn generate_prisma(schema: &SystemSchema, dest_path: &PathBuf) {}
+pub async fn generate_prisma(workspace_id: &str, schema: &SystemSchema) {}

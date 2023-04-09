@@ -1,7 +1,10 @@
+# This is a sample schema file for testing with different project structures
 schemas:
-  - name: Typescript backend
+  typescript:
+    name: Typescript backend
     project_type: Typescript
     path: ./typescript.ts
-  - name: Prisma client
+  prisma:
+    name: Prisma client
     project_type: Prisma
     path: ./prisma

@@ -1,25 +1,37 @@
 use indoc::indoc;
-use std::{fs::write, path::PathBuf};
+use std::fs::write;
 
-use crate::utils::{Class, Enum, Property, PropertyType, SystemSchema};
+use convert_case::{Case, Casing};
 
-pub fn generate_typescript(schema: &SystemSchema, dest_path: &PathBuf) {
+use crate::{
+    utils::{config::Config, Class, Enum, Property, PropertyTypeRelation},
+    SystemSchema,
+};
+
+pub async fn generate_typescript(workspace_id: &str, schema: &SystemSchema) {
+    // Fetch all workspace classes
+    let classes_query = reqwest::get(format!(
+        "{}/workspaces/{}/classes",
+        Config::get_host(),
+        workspace_id
+    ))
+    .await
+    .expect("Failed to fetch endpoint")
+    .json::<Vec<Class>>()
+    .await
+    .expect("Failed to parse json");
+
     // Generate classes (interfaces)
-    let classes = if let Some(classes) = &schema.classes {
-        generate_classes(classes)
-    } else {
-        "".to_string()
-    };
-
+    let classes = generate_classes(&classes_query);
     // Generate enums
-    let enums = if let Some(enums) = &schema.enums {
-        generate_enums(enums)
-    } else {
-        "".to_string()
-    };
+    // let enums = if let Some(enums) = &schema.enums {
+    //     generate_enums(enums)
+    // } else {
+    //     "".to_string()
+    // };
 
-    let result = classes + &enums;
-    let file = write(dest_path, result);
+    let result = classes;
+    let file = write(&schema.path, result);
     match file {
         Ok(_) => println!("File written successfully"),
         Err(_) => println!("Coulnd't write file"),
@@ -33,7 +45,7 @@ fn generate_enums(enums: &Vec<Enum>) -> String {
         let values = _enum.values.iter().fold("".to_string(), |acc, value| {
             acc + &format!(
                 indoc! {"
-                  \t{},
+                  {},
                 "},
                 value.name
             )
@@ -63,9 +75,10 @@ fn generate_classes(classes: &Vec<Class>) -> String {
             indoc! {"
               interface {} {{
               {}\
-              }};\n
+              }}
             "},
-            class.name, properties
+            class.name.to_case(Case::UpperCamel),
+            properties
         );
         acc + &class
     })
@@ -75,30 +88,27 @@ fn generate_properties(properties: &Vec<Property>) -> String {
     // Iterate over properties and generate a list of properties separated by newline
     properties.iter().fold("".to_string(), |acc, property| {
         // Get the language-specific name of property
-        let property_type = get_property_type(&property.property_type);
+        let property_type = get_property_type(&property.property_type_relation);
 
         // Format and concatenate with result
         let property = format!(
             indoc! {"
             \t{}{}: {};
             "},
-            property.name.to_lowercase(),
-            if let Some(_) = property.required {
-                "?"
-            } else {
-                ""
-            },
+            property.name.to_case(Case::Camel),
+            if property.is_required { "" } else { "?" },
             property_type
         );
         acc + &property
     })
 }
 
-fn get_property_type(property_type: &PropertyType) -> &str {
+fn get_property_type(property_type: &PropertyTypeRelation) -> &str {
     // Get the language-specific names for each property type
     match property_type {
-        PropertyType::String | PropertyType::DateTime => "string",
-        PropertyType::Integer => "number",
-        PropertyType::Foreign(_) => todo!(),
+        PropertyTypeRelation::String => "string",
+        PropertyTypeRelation::Integer => "number",
+        PropertyTypeRelation::DateTime => "Date",
+        PropertyTypeRelation::Foreign { name } => name,
     }
 }

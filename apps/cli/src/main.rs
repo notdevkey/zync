@@ -1,10 +1,14 @@
 use clap::{Parser, ValueEnum};
 use serde::Deserialize;
 use std::{
+    collections::HashMap,
     fs::File,
     io::{prelude::*, BufReader},
     path::PathBuf,
 };
+
+#[macro_use]
+extern crate dotenv_codegen;
 
 mod commands;
 mod languages;
@@ -23,7 +27,6 @@ enum Language {
 #[command(bin_name = "zync")]
 enum Cli {
     Generate(Generate),
-    Sync(Sync),
 }
 
 #[derive(Parser)]
@@ -39,7 +42,7 @@ pub struct Generate {
 }
 
 #[derive(Debug, Deserialize)]
-struct Schema {
+pub struct SystemSchema {
     name: Option<String>,
     project_type: Language,
     path: PathBuf,
@@ -47,7 +50,7 @@ struct Schema {
 
 #[derive(Debug, Deserialize)]
 pub struct ConfigFile {
-    schemas: Vec<Schema>,
+    schemas: HashMap<String, SystemSchema>,
 }
 
 impl ConfigFile {
@@ -57,16 +60,15 @@ impl ConfigFile {
         let mut contents = String::new();
         reader.read_to_string(&mut contents)?;
 
-        let deserialized_contents: ConfigFile =
-            serde_yaml::from_str(&contents).expect("Couldn't parse file");
+        let deserialized_contents = serde_yaml::from_str(&contents).expect("Couldn't parse file");
         Ok(deserialized_contents)
     }
 }
 
-fn main() -> Result<(), std::io::Error> {
+#[tokio::main]
+async fn main() -> Result<(), std::io::Error> {
     let Cli::Generate(args) = Cli::parse();
-
-    run_generate(&args);
+    run_generate(&args).await.expect("Couldn;t generate schema");
 
     Ok(())
 }

@@ -10,13 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Workspace {
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  description String?   @db.VarChar(256)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  // Relations
+  classes Class[]
+}
+
 model Class {
-  id          String     @id @default(uuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  name        String     @db.VarChar(100)
-  description String     @db.VarChar(256)
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(100)
+  description String?   @db.VarChar(256)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  // Relations
   properties  Property[]
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId String
 }
 
 model Property {

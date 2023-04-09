@@ -63,7 +63,6 @@ export function PropertyCreate({ foreignTypes, classId, onSubmit }: Props) {
   // Submits property
   const onSubmitProperty = useCallback(() => {
     const { name, propertyType, description, isRequired } = propertyData;
-    console.log(propertyData, 'PROPRETY DATA');
     if (!name || !propertyType) return;
     addPropertyMutation.mutate({
       name,
