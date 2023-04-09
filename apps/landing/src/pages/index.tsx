@@ -78,7 +78,7 @@ export function Index() {
             variants={titleFade}
             className="mb-6 text-5xl font-medium text-center text-white"
           >
-            Ultimate type safety, <br /> synced all across your <br />{' '}
+            Ultimate type safety, <br /> synced all across your <br />
             application.
           </motion.h1>
           <motion.p

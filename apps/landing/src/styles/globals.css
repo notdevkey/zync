@@ -39,6 +39,7 @@ body {
   background-image: url('/svg/bg.svg');
   background-size: 5vw;
   background-repeat: repeat;
+  background-attachment: fixed;
   font-family: 'Clash Display';
   width: 100%;
   overflow-x: hidden;
