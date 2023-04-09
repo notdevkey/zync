@@ -1,0 +1,40 @@
+{
+  "name": "@zyncli/zync",
+  "version": "0.1.0",
+  "bin": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "yarn build && node lib/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "ignorePatterns": [
+      "lib/*"
+    ],
+    "root": true
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "^8.31.0",
+    "typescript": "^4.9.4"
+  },
+  "optionalDependencies": {
+    "@zyncli/cli-darwin-arm64": "0.1.0",
+    "@zyncli/cli-darwin-x64": "0.1.0",
+    "@zyncli/cli-linux-x64": "0.1.0",
+    "@zyncli/cli-windows-arm64": "0.1.0",
+    "@zyncli/cli-windows-x64": "0.1.0"
+  }
+}

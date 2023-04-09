@@ -1,7 +1,5 @@
 use serde::{Deserialize, Serialize};
 
-pub mod config;
-
 #[derive(Default, Debug, Deserialize, Serialize)]
 #[serde(tag = "type")]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
