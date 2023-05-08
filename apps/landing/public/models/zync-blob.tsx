@@ -65,7 +65,6 @@ export function ZyncBlob(props: JSX.IntrinsicElements['group']) {
       <Float
         speed={speed}
         rotationIntensity={50}
-        dispose={null}
         scale={4}
         position={[8, 0, 0]}
       >

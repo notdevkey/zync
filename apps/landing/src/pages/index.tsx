@@ -2,11 +2,9 @@ import {
   ArrowLongDownIcon,
   BoltIcon,
   ChartBarIcon,
-  ClipboardIcon,
   CommandLineIcon,
   HeartIcon,
 } from '@heroicons/react/24/outline';
-import { Tooltip } from '@material-tailwind/react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -42,7 +40,7 @@ export function Index() {
   });
 
   const copyNpmCommandToClipboard = useCallback(() => {
-    navigator.clipboard.writeText('npm install @zyncli/zync');
+    navigator.clipboard.writeText('npm install -g @zyncli/zync');
     setIsCommandCopied(true);
     setTimeout(() => setIsCommandCopied(false), 2000);
   }, []);
@@ -54,8 +52,8 @@ export function Index() {
         <div className="absolute -z-10 w-[360px] h-[360px] bg-[#BD4BC2] blur-[200px] top-1/2 left-1/2" />
         <div className="absolute top-0 left-0 w-screen h-screen isolate">
           <Canvas camera={{ fov: 50 }}>
-            <ambientLight intensity={0.1} />
-            <pointLight color="red" position={[0, 10, 10]} />
+            {/* <ambientLight  intensity={0.1} /> */}
+            <pointLight position={[0, 10, 10]} />
             <Suspense fallback={null}>
               <ZyncBlob />
               <Rig />
@@ -118,7 +116,7 @@ export function Index() {
               npm install @zyncli/zync
             </SyntaxHighlighter>
 
-            <Tooltip
+            {/* <Tooltip
               content={isCommandCopied ? 'Copied!' : 'Copy'}
               placement="top"
               nonce={undefined}
@@ -131,7 +129,7 @@ export function Index() {
               >
                 <ClipboardIcon className="w-6 text-white" />
               </button>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         </div>
         {/* <div>
