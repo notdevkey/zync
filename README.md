@@ -10,6 +10,8 @@
 
 # Ultimate type safety, synced all across your application.
 
+🥇 **Winner of Junior Achievement Latvia Unlocked 2022**
+
 Zync is the tool for perfectionists with deadlines that deals with persisting shared data troughout an application and finally fixes all your type safety insecurities.
 
 ## Running locally
